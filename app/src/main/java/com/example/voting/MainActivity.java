@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("mytest", "getMyVote() " + vote2.getMyVote().send());
 
                             try {
-                                 vote2.giveRightToVote("0x7643a332bA53aB63F16993469517bEF45DA6E508").send();
+                                 //пррпрпрпррп vote2.giveRightToVote("0x7643a332bA53aB63F16993469517bEF45DA6E508").send(); ++++++++++
                                 Log.d("mytest", "vote  " + vote2.vote(BigInteger.valueOf(1)).send());
                             }
                             catch (Exception e){
