@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     String connectUrl = "HTTP://192.168.0.112:7545";
     Web3j web3j;
     Vote vote;
-    private final static String PRIVATE_KEY = "243f16f0f8e5ba62faa8405324087d50a70e5a7f96081f8b5cfe585baf9984b3";
+    private final static String PRIVATE_KEY = "f9dc337a66fe3bce876ba3db6e9a7f30867a64d7422b2500734483c4c1dc611e";
     private final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
     private final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
 
@@ -129,22 +129,44 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("mytest", "getQuestionDescription "+ vote.getQuestionDescription().send());
                             Log.d("mytest", "secretary "+ vote.secretary().send());
                             Log.d("mytest", "credentials.getAddress() "+  credentials.getAddress());*/
-                            Credentials credentials = Credentials.create(PRIVATE_KEY);
-                            Credentials credentials2 = Credentials.create("b6d59e95df7bf4f74c815c1604f7fd17e9280ecf862b121f94db1ce70dcc30a0");
-                            Vote vote2 = Vote.load("0x46dd1214e20e578b326dd20fcaf3bab4a99578e7",web3j,credentials2,contractGasProvider);
-
-                            Log.d("mytest", "vote address " + vote2.getContractAddress());
-                            Log.d("mytest", "getMyVote() " + vote2.getMyVote().send());
-
+                            //Credentials credentials = Credentials.create("f9dc337a66fe3bce876ba3db6e9a7f30867a64d7422b2500734483c4c1dc611e");
+                            //vote = deploy(credentials,web3j);
+                            Credentials credentials2 = Credentials.create("9980e7943cffbeddbd64566c6d1ca47ac400ce0d9343d89e8ac2536da75a3c77");
+                            Vote vote = Vote.load("0x1fc1b46aedf227d3532426b2157e30a608b19477",web3j,credentials2,contractGasProvider);
+                            ArrayList<String> address = new ArrayList<>();
+                            address.add("0x21a2CEf207A3e0790243903867Bd81A77527232f");
                             try {
-                                 //пррпрпрпррп vote2.giveRightToVote("0x7643a332bA53aB63F16993469517bEF45DA6E508").send(); ++++++++++
-                                Log.d("mytest", "vote  " + vote2.vote(BigInteger.valueOf(1)).send());
+                               // Log.d("mytest", "give " + vote.giveRightToVote(address).send());
                             }
-                            catch (Exception e){
+                            catch (Exception e) {
                                 Log.d("mytest",e.getMessage());
                             }
-                            Log.d("mytest", "getMyVote() " + vote2.getMyVote().send());
-                            Log.d("mytest", "secretary() " + vote2.secretary().send());
+
+                            Log.d("mytest", "vote address " + vote.getContractAddress());
+                            Log.d("mytest", "getMyVote() " + vote.getMyVote().send());
+                            Log.d("mytest", "getTotalVoters() " + vote.getTotalVoters().send());
+                            Log.d("mytest", "getCurrentVoters() " + vote.getCurrentVoters().send());
+                            try {
+                                Log.d("mytest", "vote " + vote.vote(BigInteger.valueOf(1)).send());
+                            }
+                            catch (Exception e){
+                                Log.d("mytest", e.getMessage());
+                            }
+                            Log.d("mytest", "getMyVote() " + vote.getMyVote().send());
+                            Log.d("mytest", "getCurrentVoters() " + vote.getCurrentVoters().send());
+
+                            //Log.d("mytest", "getMyVote() " + vote2.get);
+
+
+                           // try {
+                                 //пррпрпрпррп vote2.giveRightToVote("0x7643a332bA53aB63F16993469517bEF45DA6E508").send(); ++++++++++
+                            //    Log.d("mytest", "vote  " + vote2.vote(BigInteger.valueOf(1)).send());
+                           // }
+                           // catch (Exception e){
+                            //    Log.d("mytest",e.getMessage());
+                          //  }
+                           // Log.d("mytest", "getMyVote() " + vote2.getMyVote().send());
+                           // Log.d("mytest", "secretary() " + vote2.secretary().send());
 
 
 
