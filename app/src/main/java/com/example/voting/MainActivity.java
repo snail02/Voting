@@ -1,7 +1,9 @@
 package com.example.voting;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.voting.contract.Vote;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -23,12 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-
     Button buttonDeploy;
+    RecyclerView recyclerVotingCard;
+    FloatingActionButton fab;
+    List<VotingCard> listCard = new ArrayList<>();
 
-
-    String connectUrl = "HTTP://192.168.0.112:7545";
+    String connectUrl = "HTTP://192.168.0.101:7545";
     Web3j web3j;
     Vote vote;
     private final static String PRIVATE_KEY = "f9dc337a66fe3bce876ba3db6e9a7f30867a64d7422b2500734483c4c1dc611e";
@@ -81,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    static Vote deploy(Credentials credentials, Web3j w3)
-            throws Exception {
+    static Vote deploy(Credentials credentials, Web3j w3) throws Exception {
         String nameQ = "nameQ";
         String descQ = "descQ";
         ArrayList<String> list = new ArrayList<>();
@@ -91,7 +94,10 @@ public class MainActivity extends AppCompatActivity {
         return Vote.deploy(w3, credentials, contractGasProvider, nameQ, descQ, list).send();
     }
 
-
+    public void createNewVote(){
+        Intent myIntent = new Intent(MainActivity.this, NewVoteActivity.class);
+        MainActivity.this.startActivity(myIntent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,10 +105,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         buttonDeploy = (Button) findViewById(R.id.buttonDeploy);
-
+        fab = findViewById(R.id.create_button);
 
         connect(connectUrl);
 
+        VotingCard vc = new VotingCard();
+        listCard.add(vc);
+        listCard.add(vc);
+        listCard.add(vc);
+        listCard.add(vc);
+        listCard.add(vc);
+        listCard.add(vc);
+        listCard.add(vc);
+        listCard.add(vc);
+
+        recyclerVotingCard = findViewById(R.id.list);
+        VotingCardAdapter adapterCard = new VotingCardAdapter(this, listCard);
+        recyclerVotingCard.setAdapter(adapterCard);
 
         buttonDeploy.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -168,29 +187,24 @@ public class MainActivity extends AppCompatActivity {
                            // Log.d("mytest", "getMyVote() " + vote2.getMyVote().send());
                            // Log.d("mytest", "secretary() " + vote2.secretary().send());
 
-
-
-
-
-
-
-
-
-
-
-
-
                         } catch (Exception e){
                             e.printStackTrace();
                         }
                     }
                 });
-
                 thread.start();
 
             }
         });
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                createNewVote();
+            }
+        });
 
 
     }
