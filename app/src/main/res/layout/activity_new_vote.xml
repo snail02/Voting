@@ -34,9 +34,11 @@
         <EditText
             android:id="@+id/edit_desc_vote"
             android:layout_width="match_parent"
-            android:layout_height="202dp"
+            android:layout_height="203dp"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:lines="5"
             android:text="Описание" />
 
         <Button
@@ -44,5 +46,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Создать" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

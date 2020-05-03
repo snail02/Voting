@@ -1,30 +1,37 @@
 package com.example.voting;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.List;
 
 public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.VotingCardViewHolder> {
 
-    private LayoutInflater inflater;
     private List<VotingCard> card;
 
-    VotingCardAdapter(Context context, List<VotingCard> card){
+    VotingCardAdapter(List<VotingCard> card){
         this.card = card;
-        this.inflater = LayoutInflater.from(context);
+    }
+
+    private void openVoteActivity(Context context){
+        Intent myIntent = new Intent(context, VoteActivity.class);
+        context.startActivity(myIntent);
     }
 
     @NonNull
     @Override
     public VotingCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_card, parent, false);
         return new VotingCardViewHolder(view);
     }
 
@@ -35,6 +42,15 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
         holder.descView.setText(votingCard.getDescription());
         holder.activeView.setText(votingCard.getStatusActive());
         holder.votedView.setText(votingCard.getStatusVoted());
+
+        holder.setCardVoteClickListener(new CardVoteClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                /*Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                openVoteActivity(view.getContext());
+            }
+        });
     }
 
     @Override
@@ -42,9 +58,10 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
         return card.size();
     }
 
-    public class VotingCardViewHolder extends RecyclerView.ViewHolder{
+    public class VotingCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView nameView, descView, activeView, votedView;
+        private CardVoteClickListener cardVoteClickListener;
 
         public VotingCardViewHolder(@NonNull View itemView){
             super(itemView);
@@ -53,6 +70,17 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
             descView = (TextView) itemView.findViewById(R.id.description);
             activeView = (TextView) itemView.findViewById(R.id.active);
             votedView = (TextView) itemView.findViewById(R.id.voted);
+
+            itemView.setOnClickListener(this);
+        }
+
+        public void setCardVoteClickListener(CardVoteClickListener cardVoteClickListener){
+            this.cardVoteClickListener = cardVoteClickListener;
+        }
+
+        @Override
+        public void onClick(View view) {
+            cardVoteClickListener.onClick(view,getAdapterPosition());
         }
     }
 }

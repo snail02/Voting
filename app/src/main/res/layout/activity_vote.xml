@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VoteActivity">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/name_vote_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Тема вопроса"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/desc_vote_text"
+            android:layout_width="match_parent"
+            android:layout_height="168dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/variant_yes_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Да" />
+
+        <Button
+            android:id="@+id/variant_no_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Нет" />
+
+        <Button
+            android:id="@+id/variant_neutral_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Воздержался" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

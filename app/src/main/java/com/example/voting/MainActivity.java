@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
     private final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
 
-    public Web3j connect(String url){
+    /*public Web3j connect(String url){
          web3j = Web3j.build(new HttpService(url));
         try {
             Web3ClientVersion clientVersion = web3j.web3ClientVersion().sendAsync().get();
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return web3j;
-    }
+    }*/
 
     static ContractGasProvider contractGasProvider = new ContractGasProvider() {
         @Override
@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void createNewVote(){
         Intent myIntent = new Intent(MainActivity.this, NewVoteActivity.class);
+        myIntent.putExtra("url", connectUrl);
         MainActivity.this.startActivity(myIntent);
     }
 
@@ -107,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
         buttonDeploy = (Button) findViewById(R.id.buttonDeploy);
         fab = findViewById(R.id.create_button);
 
-        connect(connectUrl);
+        //connect(connectUrl);
+        web3j = VoteApplication.getInstance().getWeb3j();
 
         VotingCard vc = new VotingCard();
         listCard.add(vc);
@@ -120,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         listCard.add(vc);
 
         recyclerVotingCard = findViewById(R.id.list);
-        VotingCardAdapter adapterCard = new VotingCardAdapter(this, listCard);
+        VotingCardAdapter adapterCard = new VotingCardAdapter(listCard);
         recyclerVotingCard.setAdapter(adapterCard);
 
         buttonDeploy.setOnClickListener(new View.OnClickListener(){
@@ -148,12 +150,12 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("mytest", "getQuestionDescription "+ vote.getQuestionDescription().send());
                             Log.d("mytest", "secretary "+ vote.secretary().send());
                             Log.d("mytest", "credentials.getAddress() "+  credentials.getAddress());*/
-                            //Credentials credentials = Credentials.create("f9dc337a66fe3bce876ba3db6e9a7f30867a64d7422b2500734483c4c1dc611e");
-                            //vote = deploy(credentials,web3j);
-                            Credentials credentials2 = Credentials.create("9980e7943cffbeddbd64566c6d1ca47ac400ce0d9343d89e8ac2536da75a3c77");
-                            Vote vote = Vote.load("0x1fc1b46aedf227d3532426b2157e30a608b19477",web3j,credentials2,contractGasProvider);
+                            Credentials credentials = Credentials.create("a1866fc6b940e598e2219658949ca34797ba01b6495f507c0208a2e37c2f37c8");
+                            vote = deploy(credentials,web3j);
+                            //Credentials credentials2 = Credentials.create("457927f9a0da8e47420a66e0c2729aa28568e1cb9e35a2b6580875459671c8ab");
+                            //Vote vote = Vote.load("0x1fc1b46aedf227d3532426b2157e30a608b19477",web3j,credentials2,contractGasProvider);
                             ArrayList<String> address = new ArrayList<>();
-                            address.add("0x21a2CEf207A3e0790243903867Bd81A77527232f");
+                            address.add("0x87a851a5E1852eaBA8a2124AF4FdBbc0ce73c8AB");
                             try {
                                // Log.d("mytest", "give " + vote.giveRightToVote(address).send());
                             }
