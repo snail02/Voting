@@ -23,6 +23,14 @@ public class VotingCard {
         statusVoted = true;
     }
 
+    VotingCard(String name, String descripton, String address){
+        this.name = name;
+        this.descripton = descripton;
+        this.address = address;
+        statusActive = true;
+        statusVoted = true;
+    }
+
     VotingCard(Vote vote) throws Exception {
         createCard(vote);
     }

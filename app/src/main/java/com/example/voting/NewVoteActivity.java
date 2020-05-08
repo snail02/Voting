@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.voting.contract.Vote;
+import com.google.firebase.database.DatabaseReference;
+
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
@@ -35,7 +37,7 @@ public class NewVoteActivity extends AppCompatActivity {
 
     ArrayList<String> variant = new ArrayList<String>();
 
-    private final static String PRIVATE_KEY = "a1866fc6b940e598e2219658949ca34797ba01b6495f507c0208a2e37c2f37c8";
+    private final static String PRIVATE_KEY = "243f16f0f8e5ba62faa8405324087d50a70e5a7f96081f8b5cfe585baf9984b3";
     private final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
     private final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
     static ContractGasProvider contractGasProvider = new ContractGasProvider() {
@@ -64,6 +66,7 @@ public class NewVoteActivity extends AppCompatActivity {
 
     static Vote deploy(Credentials credentials, Web3j w3, String name, String desc, ArrayList<String> list) throws Exception {
         return Vote.deploy(w3, credentials, contractGasProvider, name, desc, list).send();
+
     }
 
     @Override
@@ -97,6 +100,10 @@ public class NewVoteActivity extends AppCompatActivity {
                             vote = deploy(credentials, web3j,name, desc, variant);
                             Log.d("mytest", "vote address " + vote.getContractAddress());
                             Log.d("mytest", "getMyVote() " + vote.getMyVote().send());
+
+                            SmartContract contract = new SmartContract(vote.getContractAddress(), name, desc);
+                            DatabaseReference myRef = VoteApplication.getInstance().myRef;
+                            myRef.push().setValue(contract);
                         } catch (Exception e) {
                             Log.d("mytest", e.getMessage());
                         }

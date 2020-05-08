@@ -18,9 +18,16 @@ import java.util.List;
 public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.VotingCardViewHolder> {
 
     private List<VotingCard> card;
+    VotingCardAdapter(){
+
+    }
 
     VotingCardAdapter(List<VotingCard> card){
         this.card = card;
+    }
+
+    VotingCardAdapter(VotingCard card){
+        this.card.add(card);
     }
 
     private void openVoteActivity(Context context){
@@ -82,5 +89,9 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
         public void onClick(View view) {
             cardVoteClickListener.onClick(view,getAdapterPosition());
         }
+    }
+
+    public void addCard(VotingCard card) {
+        this.card.add(card);
     }
 }

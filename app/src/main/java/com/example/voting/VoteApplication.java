@@ -4,12 +4,16 @@ import android.app.Application;
 import android.util.Log;
 
 import com.example.voting.contract.Vote;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
 
 public class VoteApplication extends Application {
+    FirebaseDatabase database;
+    DatabaseReference myRef ;
 
     private Web3j web3j;
 
@@ -19,15 +23,22 @@ public class VoteApplication extends Application {
         return instance;
     }
 
+
+
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
         web3j = connect();
+
+        database = FirebaseDatabase.getInstance();
+        database.setPersistenceEnabled(true);
+        myRef = database.getReference("smartContract").child("users").child("newUser2");
     }
 
     public Web3j connect(){
-        web3j = Web3j.build(new HttpService("HTTP://192.168.0.103:7545"));
+        web3j = Web3j.build(new HttpService("HTTP://192.168.0.112:7545"));
+        //web3j = Web3j.build(new HttpService("https://ropsten.infura.io/v3/6217c9661e8143cdad94007434e30c43"));
         try {
             Web3ClientVersion clientVersion = web3j.web3ClientVersion().sendAsync().get();
             String web3ClientVersionString = clientVersion.getWeb3ClientVersion();
