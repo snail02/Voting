@@ -14,9 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".VoteActivity"></activity>
+        <activity android:name=".AuthorizationActivity"></activity>
+        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".VoteActivity" />
         <activity android:name=".NewVoteActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
