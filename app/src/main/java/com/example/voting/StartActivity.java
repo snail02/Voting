@@ -22,8 +22,6 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-
-
         buttonRegistration = findViewById(R.id.button_registration);
         buttonAuthorization = findViewById(R.id.button_authorization);
 
@@ -32,8 +30,6 @@ public class StartActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent myIntent = new Intent(StartActivity.this, RegistrationActivity.class);
                 StartActivity.this.startActivity(myIntent);
-
-
             }
         });
 
@@ -45,6 +41,4 @@ public class StartActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

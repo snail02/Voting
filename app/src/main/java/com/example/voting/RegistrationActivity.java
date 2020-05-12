@@ -36,9 +36,6 @@ public class RegistrationActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference users;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,28 +54,19 @@ public class RegistrationActivity extends AppCompatActivity {
         database = VoteApplication.getInstance().database;
         users = VoteApplication.getInstance().users;
 
-
-
         buttonRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(checkData()!="successful") {
-                    Toast.makeText(RegistrationActivity.this, checkData(), Toast.LENGTH_SHORT).show();
-                }
-                else{
-
+                if(checkData().equals("successful")) {
                     //Регистрация
                     registration();
-
-
                 }
-
-
+                else{
+                    Toast.makeText(RegistrationActivity.this, checkData(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
-
-
 
     public void registration(){
         auth.createUserWithEmailAndPassword(email.getText().toString(), pass.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -98,7 +86,6 @@ public class RegistrationActivity extends AppCompatActivity {
                             Toast.makeText(RegistrationActivity.this, "Пользователь добавлен", Toast.LENGTH_SHORT).show();
                             Intent myIntent = new Intent(RegistrationActivity.this, MainActivity.class);
                             RegistrationActivity.this.startActivity(myIntent);
-
                         });
             }
         });
@@ -134,6 +121,11 @@ public class RegistrationActivity extends AppCompatActivity {
         if(pass.getText().toString().length()<5){
 
             return "Введите пароль, который более 5 символов";
+        }
+
+        if(pass.getText().equals(confirmPass.getText())){
+
+            return pass.getText().toString() + "" + confirmPass.getText().toString();
         }
 
         return "successful";

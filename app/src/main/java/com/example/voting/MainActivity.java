@@ -3,21 +3,27 @@ package com.example.voting;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.voting.contract.Vote;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -60,12 +66,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
+import jnr.ffi.annotations.In;
+
 public class MainActivity extends AppCompatActivity {
 
     Button buttonDeploy;
     RecyclerView recyclerVotingCard;
     FloatingActionButton fab;
     List<VotingCard> listCard = new ArrayList<>();
+
+    FirebaseAuth auth;
 
     String connectUrl = "HTTP://192.168.0.112:7545";
     //String connectUrl = "https://ropsten.infura.io/v3/6217c9661e8143cdad94007434e30c43";
@@ -154,7 +164,35 @@ public class MainActivity extends AppCompatActivity {
         Security.insertProviderAt(new BouncyCastleProvider(), 1);
     }
 
+    @Override
+    public void onBackPressed() {
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.logout:
+                Toast.makeText(MainActivity.this, "SHO", Toast.LENGTH_SHORT).show();
+                signOut();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void signOut(){
+        FirebaseAuth.getInstance().signOut();
+        finish();
+        startActivity(new Intent(this, StartActivity.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +200,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setupBouncyCastle();
 
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         buttonDeploy = (Button) findViewById(R.id.buttonDeploy);
         fab = findViewById(R.id.create_button);
@@ -343,14 +382,6 @@ public class MainActivity extends AppCompatActivity {
                            // vote = deploy(credentials4,web3j);
                         List<String> acclist =  web3j.ethAccounts().send().getAccounts();
                         Log.d("mytest", "acc "+acclist);
-
-
-
-
-
-
-
-
 
                             //Log.d("mytest", "address contract" + vote.getContractAddress());
                             //Credentials credentials = Credentials.create(PRIVATE_KEY);
