@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.example.voting.contract.Vote;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -14,6 +15,8 @@ import org.web3j.protocol.http.HttpService;
 public class VoteApplication extends Application {
     FirebaseDatabase database;
     DatabaseReference myRef ;
+    FirebaseAuth auth;
+    DatabaseReference users;
 
     private Web3j web3j;
 
@@ -31,9 +34,12 @@ public class VoteApplication extends Application {
         instance = this;
         web3j = connect();
 
+        auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(true);
-        myRef = database.getReference("smartContract").child("users").child("newUser2");
+       // database.setPersistenceEnabled(true);
+        users = database.getReference("Users");
+        myRef = database.getReference("SmartContract");
+
     }
 
     public Web3j connect(){

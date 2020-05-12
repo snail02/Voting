@@ -182,15 +182,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         //DatabaseReference myRef = VoteApplication.getInstance().myRef;
-        DatabaseReference myRef = VoteApplication.getInstance().myRef.getParent();
-        Query myQuery = myRef;
+       // DatabaseReference myRef = VoteApplication.getInstance().database;
+      //  Query myQuery = myRef;
 
 
         recyclerVotingCard = findViewById(R.id.list);
         VotingCardAdapter adapterCard = new VotingCardAdapter(listCard);
         recyclerVotingCard.setAdapter(adapterCard);
 
-
+/*
         myQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
+*/
 
         buttonDeploy.setOnClickListener(new View.OnClickListener(){
             @Override

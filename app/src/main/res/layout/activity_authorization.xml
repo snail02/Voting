@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <EditText
-        android:id="@+id/editText8"
+        android:id="@+id/editTextEmailSignIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -49,10 +49,10 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText8" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmailSignIn" />
 
     <EditText
-        android:id="@+id/editText9"
+        android:id="@+id/editTextPassSignIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
@@ -70,5 +70,5 @@
         android:text="Войти"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText9" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassSignIn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

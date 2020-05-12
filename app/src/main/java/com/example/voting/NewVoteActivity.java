@@ -102,6 +102,7 @@ public class NewVoteActivity extends AppCompatActivity {
                             Log.d("mytest", "getMyVote() " + vote.getMyVote().send());
 
                             SmartContract contract = new SmartContract(vote.getContractAddress(), name, desc);
+
                             DatabaseReference myRef = VoteApplication.getInstance().myRef;
                             myRef.push().setValue(contract);
                         } catch (Exception e) {
