@@ -5,6 +5,6 @@
     <item
         android:id="@+id/logout"
         android:icon="@drawable/ic_more_vert_black_24dp"
-        android:title="Quit"
+        android:title="Выход из аккаунта"
         app:showAsAction="never" />
 </menu>

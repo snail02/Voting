@@ -58,4 +58,5 @@ public class VotingCard {
         else
             return "Вы не голосовали";
     }
+
 }

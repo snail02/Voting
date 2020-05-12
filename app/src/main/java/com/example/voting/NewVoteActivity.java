@@ -1,10 +1,12 @@
 package com.example.voting;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -69,6 +71,7 @@ public class NewVoteActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +85,11 @@ public class NewVoteActivity extends AppCompatActivity {
         variant.add("Da");
         variant.add("Net");
         variant.add("Vozderjalsya");
+
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Создание голосования");
 
         web3j = VoteApplication.getInstance().getWeb3j();
 

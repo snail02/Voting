@@ -30,8 +30,11 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
         this.card.add(card);
     }
 
-    private void openVoteActivity(Context context){
+    private void openVoteActivity(Context context, int position){
+
         Intent myIntent = new Intent(context, VoteActivity.class);
+        myIntent.putExtra("name",card.get(position).getName());
+        myIntent.putExtra("description",card.get(position).getDescription());
         context.startActivity(myIntent);
     }
 
@@ -55,7 +58,7 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
             public void onClick(View view, int position) {
                 /*Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
-                openVoteActivity(view.getContext());
+                openVoteActivity(view.getContext(), position);
             }
         });
     }

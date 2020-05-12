@@ -2,6 +2,7 @@ package com.example.voting;
 
 public class User {
     private String fam, name, pat, email, phone, pass;
+    private boolean secretary;
 
     public User() {}
 
@@ -12,6 +13,7 @@ public class User {
         this.email = email;
         this.phone = phone;
         this.pass = pass;
+        secretary=false;
 
     }
 
@@ -37,6 +39,14 @@ public class User {
 
     public String getPass() {
         return pass;
+    }
+
+    public boolean isSecretary() {
+        return secretary;
+    }
+
+    public void setSecretary(boolean secretary) {
+        this.secretary = secretary;
     }
 
     public void setEmail(String email) {

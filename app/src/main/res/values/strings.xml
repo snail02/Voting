@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Voting</string>
+    <string name="nameMainActivity">Активные голосования</string>
 </resources>

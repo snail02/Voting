@@ -24,6 +24,7 @@ import com.example.voting.contract.Vote;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerVotingCard;
     FloatingActionButton fab;
     List<VotingCard> listCard = new ArrayList<>();
+
 
     FirebaseAuth auth;
 
@@ -180,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.logout:
-                Toast.makeText(MainActivity.this, "SHO", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Вы вышли из аккаунта", Toast.LENGTH_SHORT).show();
                 signOut();
                 return true;
             default:
@@ -202,9 +204,11 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Активные голосования");
 
         buttonDeploy = (Button) findViewById(R.id.buttonDeploy);
         fab = findViewById(R.id.create_button);
+
 
         //connect(connectUrl);
         web3j = VoteApplication.getInstance().getWeb3j();
@@ -220,22 +224,22 @@ public class MainActivity extends AppCompatActivity {
         listCard.add(vc);*/
 
 
-        //DatabaseReference myRef = VoteApplication.getInstance().myRef;
+        DatabaseReference myRef = VoteApplication.getInstance().myRef;
        // DatabaseReference myRef = VoteApplication.getInstance().database;
-      //  Query myQuery = myRef;
+        Query myQuery = myRef;
 
 
         recyclerVotingCard = findViewById(R.id.list);
         VotingCardAdapter adapterCard = new VotingCardAdapter(listCard);
         recyclerVotingCard.setAdapter(adapterCard);
 
-/*
+
         myQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                 SmartContract contract = dataSnapshot.getValue(SmartContract.class);
-                VotingCard vc = new VotingCard(contract.getAddress(), contract.getName(), contract.getDescription());
+                VotingCard vc = new VotingCard(contract.getName(), contract.getDescription(), contract.getAddress());
 
                 adapterCard.addCard(vc);
                 recyclerVotingCard.setAdapter(adapterCard);
@@ -277,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-*/
+
 
         buttonDeploy.setOnClickListener(new View.OnClickListener(){
             @Override

@@ -1,6 +1,7 @@
 package com.example.voting;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -19,10 +20,20 @@ public class VoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Голосование");
+
         nameVote = findViewById(R.id.name_vote_text);
         descVote = findViewById(R.id.desc_vote_text);
         yes = findViewById(R.id.variant_yes_button);
         no = findViewById(R.id.variant_no_button);
         neutral = findViewById(R.id.variant_neutral_button);
+
+        Bundle arguments = getIntent().getExtras();
+        nameVote.setText(arguments.get("name").toString());
+        descVote.setText(arguments.get("description").toString());
+
+
     }
 }

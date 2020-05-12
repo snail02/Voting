@@ -1,6 +1,7 @@
 package com.example.voting;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.voting.contract.Vote;
@@ -17,6 +18,7 @@ public class VoteApplication extends Application {
     DatabaseReference myRef ;
     FirebaseAuth auth;
     DatabaseReference users;
+
 
     private Web3j web3j;
 
