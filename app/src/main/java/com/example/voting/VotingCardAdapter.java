@@ -33,8 +33,7 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
     private void openVoteActivity(Context context, int position){
 
         Intent myIntent = new Intent(context, VoteActivity.class);
-        myIntent.putExtra("name",card.get(position).getName());
-        myIntent.putExtra("description",card.get(position).getDescription());
+        myIntent.putExtra("card",card.get(position));
         context.startActivity(myIntent);
     }
 
@@ -96,5 +95,9 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
 
     public void addCard(VotingCard card) {
         this.card.add(card);
+    }
+
+    public void addCards(List<VotingCard> list){
+        card.addAll(list);
     }
 }

@@ -14,6 +14,7 @@ public class VoteActivity extends AppCompatActivity {
     Button yes;
     Button no;
     Button neutral;
+    String address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +32,11 @@ public class VoteActivity extends AppCompatActivity {
         neutral = findViewById(R.id.variant_neutral_button);
 
         Bundle arguments = getIntent().getExtras();
-        nameVote.setText(arguments.get("name").toString());
-        descVote.setText(arguments.get("description").toString());
+        VotingCard card=(VotingCard) (arguments.getSerializable("card"));
+        nameVote.setText(card.getName());
+        descVote.setText(card.getDescription());
+
+        address = card.getAddress();
 
 
     }

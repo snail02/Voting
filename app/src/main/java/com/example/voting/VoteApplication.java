@@ -18,6 +18,8 @@ public class VoteApplication extends Application {
     DatabaseReference myRef ;
     FirebaseAuth auth;
     DatabaseReference users;
+    String connectUrl = "HTTP://192.168.0.112:7545";
+    //String connectUrl = "https://ropsten.infura.io/v3/6217c9661e8143cdad94007434e30c43";
 
 
     private Web3j web3j;
@@ -45,8 +47,8 @@ public class VoteApplication extends Application {
     }
 
     public Web3j connect(){
-        web3j = Web3j.build(new HttpService("HTTP://192.168.0.112:7545"));
-        //web3j = Web3j.build(new HttpService("https://ropsten.infura.io/v3/6217c9661e8143cdad94007434e30c43"));
+        //web3j = Web3j.build(new HttpService("HTTP://192.168.0.112:7545"));
+        web3j = Web3j.build(new HttpService(connectUrl));
         try {
             Web3ClientVersion clientVersion = web3j.web3ClientVersion().sendAsync().get();
             String web3ClientVersionString = clientVersion.getWeb3ClientVersion();

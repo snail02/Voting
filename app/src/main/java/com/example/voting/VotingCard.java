@@ -8,7 +8,9 @@ import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.ContractGasProvider;
 
-public class VotingCard {
+import java.io.Serializable;
+
+public class VotingCard implements Serializable {
     public String name;
     public String descripton;
     public String address;
