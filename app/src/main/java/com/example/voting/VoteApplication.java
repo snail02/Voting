@@ -2,6 +2,7 @@ package com.example.voting;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.net.Credentials;
 import android.util.Log;
 
 import com.example.voting.contract.Vote;
@@ -12,6 +13,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.gas.ContractGasProvider;
+
+import java.math.BigInteger;
 
 public class VoteApplication extends Application {
     FirebaseDatabase database;
@@ -20,6 +24,38 @@ public class VoteApplication extends Application {
     DatabaseReference users;
     String connectUrl = "HTTP://192.168.0.112:7545";
     //String connectUrl = "https://ropsten.infura.io/v3/6217c9661e8143cdad94007434e30c43";
+
+    SharedPreferences sPref;
+    Credentials credentials;
+
+    public final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
+    public final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
+
+    public ContractGasProvider contractGasProvider = new ContractGasProvider() {
+        @Override
+        public BigInteger getGasPrice(String contractFunc) {
+            return GAS_PRICE;
+        }
+
+        @Override
+        public BigInteger getGasPrice() {
+            return GAS_PRICE;
+        }
+
+        @Override
+        public BigInteger getGasLimit(String contractFunc) {
+            return GAS_LIMIT;
+        }
+
+        @Override
+        public BigInteger getGasLimit() {
+            return GAS_LIMIT;
+        }
+    };
+
+
+    final String savedPrivateKey = "savedPrivateKey";
+    final String savedPublicKey = "savedPublicKey";
 
 
     private Web3j web3j;
@@ -63,6 +99,38 @@ public class VoteApplication extends Application {
         }
 
         return web3j;
+    }
+
+    public void savePrivateAndPublicKey(String privateKey, String publicKey ) {
+        sPref = getSharedPreferences("savedPrivateKey", MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putString(savedPrivateKey, privateKey);
+        ed.commit();
+
+        sPref = getSharedPreferences("savedPublicKey", MODE_PRIVATE);
+        SharedPreferences.Editor ed2 = sPref.edit();
+        ed2.putString(savedPublicKey, publicKey);
+        ed2.commit();
+
+
+
+    }
+
+
+    public String loadPrivateKey() {
+        sPref = getSharedPreferences("savedPrivateKey", MODE_PRIVATE);
+        String result = sPref.getString(savedPrivateKey, "");
+
+        return result;
+
+    }
+
+    public String loadPublicKey() {
+        sPref = getSharedPreferences("savedPubliceKey", MODE_PRIVATE);
+        String result = sPref.getString(savedPublicKey, "");
+
+        return result;
+
     }
 
     public Web3j getWeb3j(){

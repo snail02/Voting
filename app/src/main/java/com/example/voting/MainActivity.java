@@ -85,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
     Web3j web3j;
     Vote vote;
     private final static String PRIVATE_KEY = "243f16f0f8e5ba62faa8405324087d50a70e5a7f96081f8b5cfe585baf9984b3";
-    private final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
-    private final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
+
 
     /*public Web3j connect(String url){
          web3j = Web3j.build(new HttpService(url));
@@ -106,27 +105,7 @@ public class MainActivity extends AppCompatActivity {
         return web3j;
     }*/
 
-    static ContractGasProvider contractGasProvider = new ContractGasProvider() {
-        @Override
-        public BigInteger getGasPrice(String contractFunc) {
-            return GAS_PRICE;
-        }
 
-        @Override
-        public BigInteger getGasPrice() {
-            return GAS_PRICE;
-        }
-
-        @Override
-        public BigInteger getGasLimit(String contractFunc) {
-            return GAS_LIMIT;
-        }
-
-        @Override
-        public BigInteger getGasLimit() {
-            return GAS_LIMIT;
-        }
-    };
 
     static BigInteger getGasPrice(Web3j w3) throws IOException {
         EthGasPrice ethGasPrice = w3.ethGasPrice().send();
@@ -134,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    static Vote deploy(Credentials credentials, Web3j w3) throws Exception {
+  /*  static Vote deploy(Credentials credentials, Web3j w3) throws Exception {
         String nameQ = "nameQ";
         String descQ = "descQ";
         ArrayList<String> list = new ArrayList<>();
@@ -143,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         return Vote.deploy(w3, credentials, contractGasProvider, nameQ, descQ, list).send();
     }
 
-
+*/
 
     private void setupBouncyCastle() {
         final Provider provider = Security.getProvider(BouncyCastleProvider.PROVIDER_NAME);

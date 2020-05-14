@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.voting.contract.Vote;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -32,6 +33,9 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText pass;
     EditText confirmPass;
 
+    EditText publicKey;
+    EditText privateKey;
+
     FirebaseAuth auth;
     FirebaseDatabase database;
     DatabaseReference users;
@@ -50,6 +54,9 @@ public class RegistrationActivity extends AppCompatActivity {
         pass = findViewById(R.id.editTextPass);
         confirmPass = findViewById(R.id.editTextConfirmPass);
 
+        publicKey = findViewById(R.id.editTextPublicKey);
+        privateKey = findViewById(R.id.editTextPrivateKey);
+
         auth = VoteApplication.getInstance().auth;
         database = VoteApplication.getInstance().database;
         users = VoteApplication.getInstance().users;
@@ -60,6 +67,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 if(checkData().equals("successful")) {
                     //Регистрация
                     registration();
+                    setPublicAndPrivateKey();
                 }
                 else{
                     Toast.makeText(RegistrationActivity.this, checkData(), Toast.LENGTH_SHORT).show();
@@ -90,6 +98,10 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void setPublicAndPrivateKey(){
+        VoteApplication.getInstance().savePrivateAndPublicKey(privateKey.getText().toString(),publicKey.getText().toString());
     }
 
     public String checkData(){

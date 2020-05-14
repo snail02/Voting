@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kenai.jffi.Main;
 
+import org.web3j.crypto.Credentials;
+
 public class AuthorizationActivity extends AppCompatActivity {
 
     Button buttonAuthorization;
@@ -72,6 +74,7 @@ public class AuthorizationActivity extends AppCompatActivity {
                     public void onSuccess(AuthResult authResult) {
                         Intent myIntent = new Intent(AuthorizationActivity.this,  MainActivity.class);
                         AuthorizationActivity.this.startActivity(myIntent);
+
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {

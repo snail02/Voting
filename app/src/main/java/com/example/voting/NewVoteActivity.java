@@ -39,7 +39,8 @@ public class NewVoteActivity extends AppCompatActivity {
 
     ArrayList<String> variant = new ArrayList<String>();
 
-    private final static String PRIVATE_KEY = "243f16f0f8e5ba62faa8405324087d50a70e5a7f96081f8b5cfe585baf9984b3";
+    //private final static String PRIVATE_KEY = "243f16f0f8e5ba62faa8405324087d50a70e5a7f96081f8b5cfe585baf9984b3";
+    private final static String PRIVATE_KEY = VoteApplication.getInstance().loadPrivateKey();
     private final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
     private final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
     static ContractGasProvider contractGasProvider = new ContractGasProvider() {
@@ -102,7 +103,7 @@ public class NewVoteActivity extends AppCompatActivity {
                         String name = nameVote.getText().toString();
                         String desc = descVote.getText().toString();
                         //test.setText(name + "  " + desc);
-                        address.add("0x87a851a5E1852eaBA8a2124AF4FdBbc0ce73c8AB");
+                       // address.add("0x87a851a5E1852eaBA8a2124AF4FdBbc0ce73c8AB");
 
                         try {
                             vote = deploy(credentials, web3j,name, desc, variant);
