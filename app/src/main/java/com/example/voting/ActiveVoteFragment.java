@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import com.example.voting.contract.Vote;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.web3j.crypto.Credentials;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ActiveVoteFragment extends Fragment {
+public class ActiveVoteFragment extends Fragment implements UserInfoListener{
 
     Button buttonDeploy;
     RecyclerView recyclerVotingCard;
@@ -75,13 +76,15 @@ public class ActiveVoteFragment extends Fragment {
         buttonDeploy = (Button) view.findViewById(R.id.buttonDeploy);
         fab = view.findViewById(R.id.create_button);
        // VoteApplication.getInstance().getUserFromFB();
-        checkSecretary();
+       // checkSecretary();
 
 
         recyclerVotingCard = view.findViewById(R.id.list);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerVotingCard.setLayoutManager(mLayoutManager);
-        adapterCard = new VotingCardAdapter(new ArrayList<>());
+        if(adapterCard==null) {
+            adapterCard = new VotingCardAdapter(new ArrayList<>());
+        }
         recyclerVotingCard.setAdapter(adapterCard);
 
 
@@ -383,6 +386,9 @@ public class ActiveVoteFragment extends Fragment {
             }
         });
 
+        VoteApplication.getInstance().setListener(this);
+        VoteApplication.getInstance().getUserFromFB();
+
     }
 
     public void createNewVote() {
@@ -393,6 +399,9 @@ public class ActiveVoteFragment extends Fragment {
 
 
     public void addVotes(List<VotingCard> votes) {
+        if(adapterCard==null) {
+            adapterCard = new VotingCardAdapter(new ArrayList<>());
+        }
         adapterCard.addCards(votes);
         //recyclerVotingCard.setAdapter(adapterCard);
         adapterCard.notifyDataSetChanged();
@@ -441,8 +450,10 @@ public class ActiveVoteFragment extends Fragment {
     }
 
 
-
-
+    @Override
+    public void onInfoLoaded(User user) {
+        checkSecretary();
     }
+}
 
 

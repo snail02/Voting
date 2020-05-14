@@ -29,6 +29,7 @@ public class VoteApplication extends Application {
     String connectUrl = "HTTP://192.168.0.112:7545";
     String PRIVATE_KEY;
     User user = new User();
+    UserInfoListener listener;
 
     //String connectUrl = "https://ropsten.infura.io/v3/6217c9661e8143cdad94007434e30c43";
 
@@ -88,6 +89,9 @@ public class VoteApplication extends Application {
         myRef = database.getReference("SmartContract");
         getUserFromFB();
 
+    }
+    public void setListener(UserInfoListener userInfoListener){
+        listener=userInfoListener;
     }
 
     public Web3j connect(){
@@ -167,6 +171,7 @@ public class VoteApplication extends Application {
                                         else
                                             Log.d("mytest","secretary false" );
                                         Log.d("mytest","name " + user.getName());
+                                        listener.onInfoLoaded(user);
 
                                     }
 
@@ -190,5 +195,11 @@ public class VoteApplication extends Application {
         }
     }
 
+
+
+}
+
+interface UserInfoListener{
+    void onInfoLoaded(User user);
 }
 

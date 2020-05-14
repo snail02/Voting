@@ -8,9 +8,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -37,6 +40,8 @@ public class AuthorizationActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference users;
 
+    LinearLayout linearLayout;
+    ProgressBar progressBar;
 
 
 
@@ -51,6 +56,9 @@ public class AuthorizationActivity extends AppCompatActivity {
         buttonAuthorization = findViewById(R.id.button_authorization);
         email = findViewById(R.id.editTextEmailSignIn);
         pass = findViewById(R.id.editTextPassSignIn);
+
+        linearLayout=findViewById(R.id.linerLayoutAuthorization);
+        progressBar=findViewById(R.id.progressBarAuthorization);
 
 
         buttonAuthorization.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +76,9 @@ public class AuthorizationActivity extends AppCompatActivity {
 
 
     public void signIn(){
+        linearLayout.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         auth.signInWithEmailAndPassword(email.getText().toString(), pass.getText().toString())
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
@@ -80,6 +91,9 @@ public class AuthorizationActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                linearLayout.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 Toast.makeText(AuthorizationActivity.this, "Вы ввели неправильный email/пароль", Toast.LENGTH_SHORT).show();
             }
         });

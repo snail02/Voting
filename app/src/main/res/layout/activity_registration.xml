@@ -126,4 +126,27 @@
             android:inputType="textPersonName"
             android:text="PrivateKey" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linerLayoutRegistration"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#A9e0e0e0"
+        android:elevation="10dp"
+        android:orientation="horizontal"
+        android:visibility="gone" />
+
+
+
+    <ProgressBar
+        android:id="@+id/progressBarRegistration"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        android:elevation="10dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,12 +7,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.voting.contract.Vote;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -42,6 +46,9 @@ public class RegistrationActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference users;
 
+    LinearLayout linearLayout;
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +70,9 @@ public class RegistrationActivity extends AppCompatActivity {
         database = VoteApplication.getInstance().database;
         users = VoteApplication.getInstance().users;
 
+        linearLayout=findViewById(R.id.linerLayoutRegistration);
+        progressBar=findViewById(R.id.progressBarRegistration);
+
         buttonRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,6 +88,9 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void registration(){
+        linearLayout.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         auth.createUserWithEmailAndPassword(email.getText().toString(), pass.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
@@ -94,10 +107,18 @@ public class RegistrationActivity extends AppCompatActivity {
                 users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .setValue(user)
                         .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(RegistrationActivity.this, "Пользователь добавлен", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegistrationActivity.this, "Вы успешно зарегистрированы", Toast.LENGTH_SHORT).show();
                             Intent myIntent = new Intent(RegistrationActivity.this, MainActivity.class);
                             RegistrationActivity.this.startActivity(myIntent);
                         });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                linearLayout.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                Toast.makeText(RegistrationActivity.this, "Ошибка в регистрации", Toast.LENGTH_SHORT).show();
             }
         });
 
