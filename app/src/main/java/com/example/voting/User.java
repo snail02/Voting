@@ -1,18 +1,23 @@
 package com.example.voting;
 
 public class User {
-    private String fam, name, pat, email, phone, pass;
+    private String fam, name, pat, email, phone, pass, privateKey, publicKey;
     private boolean secretary;
 
-    public User() {}
+    public User() {
+        secretary=false;
+    }
 
-    public  User(String fam, String name, String pat, String email, String phone, String pass) {
+    public  User(String fam, String name, String pat, String email, String phone, String pass, String privateKey, String publicKey) {
         this.fam = fam;
         this.name = name;
         this.pat = pat;
         this.email = email;
         this.phone = phone;
         this.pass = pass;
+        this.privateKey = privateKey;
+        this.publicKey = publicKey;
+
         secretary=false;
 
     }
@@ -39,6 +44,14 @@ public class User {
 
     public String getPass() {
         return pass;
+    }
+
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
     }
 
     public boolean isSecretary() {
@@ -71,5 +84,13 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
     }
 }

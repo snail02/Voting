@@ -11,8 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+
 import com.example.voting.contract.Vote;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -37,10 +42,14 @@ public class NewVoteActivity extends AppCompatActivity {
     Web3j web3j;
     Vote vote;
 
+    Credentials credentials;
+
+
+
     ArrayList<String> variant = new ArrayList<String>();
 
     //private final static String PRIVATE_KEY = "243f16f0f8e5ba62faa8405324087d50a70e5a7f96081f8b5cfe585baf9984b3";
-    private final static String PRIVATE_KEY = VoteApplication.getInstance().loadPrivateKey();
+
     private final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
     private final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
     static ContractGasProvider contractGasProvider = new ContractGasProvider() {
@@ -64,7 +73,7 @@ public class NewVoteActivity extends AppCompatActivity {
             return GAS_LIMIT;
         }
     };
-    Credentials credentials = Credentials.create(PRIVATE_KEY);
+
     ArrayList<String> address = new ArrayList<>();
 
     static Vote deploy(Credentials credentials, Web3j w3, String name, String desc, ArrayList<String> list) throws Exception {
@@ -86,6 +95,15 @@ public class NewVoteActivity extends AppCompatActivity {
         variant.add("Da");
         variant.add("Net");
         variant.add("Vozderjalsya");
+
+
+
+
+
+
+
+
+        credentials = Credentials.create(VoteApplication.getInstance().PRIVATE_KEY);
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -114,12 +132,16 @@ public class NewVoteActivity extends AppCompatActivity {
 
                             DatabaseReference myRef = VoteApplication.getInstance().myRef;
                             myRef.push().setValue(contract);
+
                         } catch (Exception e) {
                             Log.d("mytest", e.getMessage());
                         }
                     }
                 });
                 thread.start();
+
+                Intent myIntent = new Intent(NewVoteActivity.this,  MainActivity.class);
+                NewVoteActivity.this.startActivity(myIntent);
             }
         });
     }

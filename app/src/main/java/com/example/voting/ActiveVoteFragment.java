@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -26,6 +28,7 @@ import org.web3j.crypto.Wallet;
 import org.web3j.crypto.WalletFile;
 import org.web3j.protocol.Web3j;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +40,10 @@ public class ActiveVoteFragment extends Fragment {
     FloatingActionButton fab;
     VotingCardAdapter adapterCard;
 
-    String connectUrl=VoteApplication.getInstance().connectUrl;
+    ProgressBar progressbar;
+    ConstraintLayout constraintLayout;
+
+    String connectUrl = VoteApplication.getInstance().connectUrl;
 
 
     public ActiveVoteFragment() {
@@ -62,19 +68,26 @@ public class ActiveVoteFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        progressbar = view.findViewById(R.id.progressBarActiveVote);
+        constraintLayout = view.findViewById(R.id.activeVoteActivityContent);
+
         buttonDeploy = (Button) view.findViewById(R.id.buttonDeploy);
         fab = view.findViewById(R.id.create_button);
+       // VoteApplication.getInstance().getUserFromFB();
+        checkSecretary();
+
 
         recyclerVotingCard = view.findViewById(R.id.list);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerVotingCard.setLayoutManager(mLayoutManager);
-         adapterCard = new VotingCardAdapter(new ArrayList<>());
+        adapterCard = new VotingCardAdapter(new ArrayList<>());
         recyclerVotingCard.setAdapter(adapterCard);
 
 
-        buttonDeploy.setOnClickListener(new View.OnClickListener(){
+        buttonDeploy.setOnClickListener(new View.OnClickListener() {
             @Override
-            public  void onClick(View v){
+            public void onClick(View v) {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -96,7 +109,6 @@ public class ActiveVoteFragment extends Fragment {
                             list = web3j.ethAccounts().send().getAccounts();
                             Log.d("mytest", list.toString());
                             Credentials credentials = Credentials.create(keyPair.getPrivateKey().toString(16));*/
-
 
 
                             /////////////////////
@@ -214,9 +226,6 @@ public class ActiveVoteFragment extends Fragment {
                         Log.d("mytest", "acc "+acclist);
 
                */
-
-
-
 
 
                             //Log.d("mytest", "address contract" + vote.getContractAddress());
@@ -355,7 +364,7 @@ public class ActiveVoteFragment extends Fragment {
                             // Log.d("mytest", "getMyVote() " + vote2.getMyVote().send());
                             // Log.d("mytest", "secretary() " + vote2.secretary().send());
 
-                        } catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -375,16 +384,65 @@ public class ActiveVoteFragment extends Fragment {
         });
 
     }
-    public void createNewVote(){
+
+    public void createNewVote() {
         Intent myIntent = new Intent(getContext(), NewVoteActivity.class);
         myIntent.putExtra("url", connectUrl);
         getContext().startActivity(myIntent);
     }
 
 
-    public void addVotes(List<VotingCard> votes){
+    public void addVotes(List<VotingCard> votes) {
         adapterCard.addCards(votes);
         //recyclerVotingCard.setAdapter(adapterCard);
         adapterCard.notifyDataSetChanged();
     }
-}
+
+    private void checkSecretary() {
+
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    if (VoteApplication.getInstance().user.isSecretary()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    fab.setVisibility(View.VISIBLE);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+
+
+                    } else {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    fab.setVisibility(View.GONE);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+
+    }
+
+
+
+
+    }
+
+

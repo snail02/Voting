@@ -34,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.web3j.abi.datatypes.Int;
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     //String connectUrl = "https://ropsten.infura.io/v3/6217c9661e8143cdad94007434e30c43";
     Web3j web3j;
     Vote vote;
-    private final static String PRIVATE_KEY = "243f16f0f8e5ba62faa8405324087d50a70e5a7f96081f8b5cfe585baf9984b3";
+    //private final static String PRIVATE_KEY = "243f16f0f8e5ba62faa8405324087d50a70e5a7f96081f8b5cfe585baf9984b3";
 
 
     /*public Web3j connect(String url){
@@ -207,6 +208,12 @@ public class MainActivity extends AppCompatActivity {
         listCard.add(vc);
         listCard.add(vc);
         listCard.add(vc);*/
+
+
+
+
+
+
 
 
         DatabaseReference myRef = VoteApplication.getInstance().myRef;

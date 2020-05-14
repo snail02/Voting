@@ -33,6 +33,8 @@ public class StartActivity extends AppCompatActivity {
         buttonAuthorization = findViewById(R.id.button_authorization);
 
         if(VoteApplication.getInstance().auth.getCurrentUser()!=null) {
+            //VoteApplication.getInstance().getUserFromFB();
+
             Intent myIntent = new Intent(StartActivity.this, MainActivity.class);
             StartActivity.this.startActivity(myIntent);
         }

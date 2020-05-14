@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.security.PublicKey;
+
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -67,7 +69,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 if(checkData().equals("successful")) {
                     //Регистрация
                     registration();
-                    setPublicAndPrivateKey();
                 }
                 else{
                     Toast.makeText(RegistrationActivity.this, checkData(), Toast.LENGTH_SHORT).show();
@@ -87,6 +88,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 user.setEmail(email.getText().toString());
                 user.setPhone(phone.getText().toString());
                 user.setPass(pass.getText().toString());
+                user.setPrivateKey(privateKey.getText().toString());
+                user.setPublicKey(publicKey.getText().toString());
 
                 users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .setValue(user)
@@ -100,9 +103,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    public void setPublicAndPrivateKey(){
-        VoteApplication.getInstance().savePrivateAndPublicKey(privateKey.getText().toString(),publicKey.getText().toString());
-    }
 
     public String checkData(){
         if(TextUtils.isEmpty(email.getText().toString())){

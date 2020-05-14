@@ -2,11 +2,13 @@ package com.example.voting;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,8 @@ public class VoteActivity extends AppCompatActivity {
 
     Vote vote;
     Credentials credentials;
+    ProgressBar progressbar;
+    ConstraintLayout constraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,28 +52,33 @@ public class VoteActivity extends AppCompatActivity {
         no = findViewById(R.id.variant_no_button);
         neutral = findViewById(R.id.variant_neutral_button);
 
-        buttonsVisibility(false);
+        progressbar=findViewById(R.id.progressBarVote);
+        constraintLayout=findViewById(R.id.voteActivityContent);
 
         Bundle arguments = getIntent().getExtras();
         VotingCard card = (VotingCard) (arguments.getSerializable("card"));
         nameVote.setText(card.getName());
         descVote.setText(card.getDescription());
 
+
+
         address = card.getAddress();
 
-        credentials = Credentials.create(VoteApplication.getInstance().loadPrivateKey());
+        credentials = Credentials.create(VoteApplication.getInstance().PRIVATE_KEY);
         Log.d("mytest", "adress cred" + credentials.getAddress());
 
         vote = Vote.load(address, VoteApplication.getInstance().getWeb3j(), credentials, VoteApplication.getInstance().contractGasProvider);
 
-        buttonsVisibility(allCheckVoted());///////////////////////////////////////////////////////////////////////////////
+        checkVotes();
+
+
 
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                vote.vote(BigInteger.valueOf(0));
-                Toast.makeText(VoteActivity.this, "Вы проголосовали", Toast.LENGTH_SHORT).show();
+                sendVote(0);
+
 
             }
         });
@@ -78,8 +87,8 @@ public class VoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                vote.vote(BigInteger.valueOf(1));
-                Toast.makeText(VoteActivity.this, "Вы проголосовали", Toast.LENGTH_SHORT).show();
+                sendVote(1);
+
 
             }
         });
@@ -88,8 +97,7 @@ public class VoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                vote.vote(BigInteger.valueOf(2));
-                Toast.makeText(VoteActivity.this, "Вы проголосовали", Toast.LENGTH_SHORT).show();
+                sendVote(2);
 
             }
         });
@@ -97,17 +105,44 @@ public class VoteActivity extends AppCompatActivity {
 
     }
 
-    public boolean allCheckVoted() {
+    public void checkVotes(){
         Thread thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
                 try {
-                    if(vote.getMyVote().send().equals("You are not voted")){
-                       check=true;
+                    String status = vote.getMyVote().send();
+                    Log.d("mytest","status "+ status);
+                    if(status.equals("You are not voted")){
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    progressbar.setVisibility(View.GONE);
+                                    constraintLayout.setVisibility(View.VISIBLE);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+
                     }
-                    else {
-                        check=true;
+                    else{
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    progressbar.setVisibility(View.GONE);
+                                    constraintLayout.setVisibility(View.GONE);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+
                     }
 
                 } catch (Exception e) {
@@ -118,26 +153,48 @@ public class VoteActivity extends AppCompatActivity {
 
         });
         thread.start();
-        return check;
+    }
+
+    public void sendVote(int index) {
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    vote.vote(BigInteger.valueOf(index)).send();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                //Toast.makeText(VoteActivity.this, "Вы проголосовали", Toast.LENGTH_SHORT).show();
+                                progressbar.setVisibility(View.VISIBLE);
+                                constraintLayout.setVisibility(View.GONE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        });
+        thread.start();
+
+
 
     }
 
 
 
 
-    public void buttonsVisibility(boolean check){
-        if(check) {
-            yes.setVisibility(View.VISIBLE);
-            no.setVisibility(View.VISIBLE);
-            neutral.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            yes.setVisibility(View.GONE);
-            no.setVisibility(View.GONE);
-            neutral.setVisibility(View.GONE);
-        }
-    }
+
+
+
 
 
 }
