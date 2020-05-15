@@ -20,6 +20,7 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.ContractGasProvider;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 public class VoteApplication extends Application {
     FirebaseDatabase database;
@@ -30,6 +31,8 @@ public class VoteApplication extends Application {
     String PRIVATE_KEY;
     User user = new User();
     UserInfoListener listener;
+
+    ArrayList<String> variant = new ArrayList<>();
 
 
     public final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
@@ -69,6 +72,9 @@ public class VoteApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+
+        createVariant(); //список вариантов ответов
+
         web3j = connect();
 
         auth = FirebaseAuth.getInstance();
@@ -139,7 +145,16 @@ public class VoteApplication extends Application {
         else{
         }
     }
+
+
+    public void createVariant(){
+        variant.add("За");
+        variant.add("Против");
+        variant.add("Воздержался");
+    }
 }
+
+
 
 interface UserInfoListener{
     void onInfoLoaded(User user);

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.renderscript.Sampler;
 import android.util.Log;
 import android.util.Printer;
+import android.util.TimingLogger;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -15,6 +16,16 @@ import android.widget.TextView;
 import android.widget.ThemedSpinnerAdapter;
 import android.widget.Toast;
 
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.chart.common.listener.Event;
+import com.anychart.chart.common.listener.ListenersInterface;
+import com.anychart.charts.Pie;
+import com.anychart.core.PiePoint;
+import com.anychart.enums.Align;
+import com.anychart.enums.LegendLayout;
 import com.example.voting.contract.Vote;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,6 +56,8 @@ public class VoteActivity extends AppCompatActivity {
     String idCard;
     String status;
 
+    AnyChartView chartView;
+
     int yesCount;
     int noCount;
     int vozderjalsya_count;
@@ -57,6 +70,8 @@ public class VoteActivity extends AppCompatActivity {
     Credentials credentials;
     ProgressBar progressbar;
     ConstraintLayout constraintLayout;
+
+    ArrayList<Integer> countVotesForVariant = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +94,8 @@ public class VoteActivity extends AppCompatActivity {
         progressbar = findViewById(R.id.progressBarVote);
         constraintLayout = findViewById(R.id.voteActivityContent);
 
+        chartView = findViewById(R.id.chartView);
+
         Bundle arguments = getIntent().getExtras();
         VotingCard card = (VotingCard) (arguments.getSerializable("card"));
         nameVote.setText(card.getName());
@@ -96,8 +113,6 @@ public class VoteActivity extends AppCompatActivity {
 
         checkVoteInfo();
         checkVotes();
-
-
 
 
         yes.setOnClickListener(new View.OnClickListener() {
@@ -125,8 +140,14 @@ public class VoteActivity extends AppCompatActivity {
 
     public void checkVotes() {
         if (!isActive) {
+
             getResultVote();
+
             messageForUser.setText("Голосование закрыто");
+            //countVotesForVariant.add(5);
+            //countVotesForVariant.add(5);
+            //countVotesForVariant.add(5);
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -134,11 +155,16 @@ public class VoteActivity extends AppCompatActivity {
                         progressbar.setVisibility(View.GONE);
                         constraintLayout.setVisibility(View.GONE);
                         messageForUser.setVisibility(View.VISIBLE);
+
+                        //setupPieChart(VoteApplication.getInstance().variant,countVotesForVariant);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
+
+
 
         } else {
 
@@ -221,7 +247,6 @@ public class VoteActivity extends AppCompatActivity {
     }
 
 
-
     public void sendVote(int index) {
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -251,43 +276,113 @@ public class VoteActivity extends AppCompatActivity {
         thread.start();
     }
 
-    public void printResultVote(){
-        if(!isActive){
-            Log.d("mytest", "da " +  yesCount);
-            Log.d("mytest", "net " +  noCount);
-            Log.d("mytest", "vozderjalsya " +  vozderjalsya_count);
+    public void printResultVote() {
+        if (!isActive) {
+
+            for (int i = 0; i < VoteApplication.getInstance().variant.size(); i++) {
+                Log.d("mytest", VoteApplication.getInstance().variant.get(i) + " " + countVotesForVariant.get(i));
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        setupPieChart(VoteApplication.getInstance().variant,countVotesForVariant);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            // Log.d("mytest", "da " +  yesCount);
+            // Log.d("mytest", "net " +  noCount);
+            // Log.d("mytest", "vozderjalsya " +  vozderjalsya_count);
         }
     }
 
-    public void getResultVote(){
+    public void getResultVote() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-        try {
+                try {
 
-            yesCount = vote.getCountVoteVariant(BigInteger.valueOf(0)).send().intValue();
-            noCount=vote.getCountVoteVariant(BigInteger.valueOf(1)).send().intValue();
-            vozderjalsya_count=vote.getCountVoteVariant(BigInteger.valueOf(2)).send().intValue();
-            printResultVote();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                    for (int i = 0; i < VoteApplication.getInstance().variant.size(); i++) {
+
+
+                        countVotesForVariant.add(vote.getCountVoteVariant(BigInteger.valueOf(i)).send().intValue());
+
+                    }
+
+
+                    //yesCount = vote.getCountVoteVariant(BigInteger.valueOf(0)).send().intValue();
+                    //noCount=vote.getCountVoteVariant(BigInteger.valueOf(1)).send().intValue();
+                    // vozderjalsya_count=vote.getCountVoteVariant(BigInteger.valueOf(2)).send().intValue();
+
+                    printResultVote();
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
         });
         thread.start();
+
+
     }
 
-    public void closeVote(){
+    public void closeVote() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                if (isLastVoters){
+                if (isLastVoters) {
                     database = FirebaseDatabase.getInstance().getReference().child("SmartContract");
                     database.child(idCard).child("statusActive").setValue(false);
                 }
             }
         });
         thread.start();
+    }
+
+    public void setupPieChart(List<String> firstList, List<Integer> secondList) {
+        Pie pie = AnyChart.pie();
+
+        List<DataEntry> dataEntries = new ArrayList<>();
+
+        for (int i = 0; i < firstList.size(); i++) {
+            dataEntries.add(new ValueDataEntry(firstList.get(i), secondList.get(i)));
+        }
+
+        pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
+            @Override
+            public void onClick(Event event) {
+                Toast.makeText(chartView.getContext(), event.getData().get("x") + ":" + event.getData().get("value"), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        pie.title("Распределение голосов");
+
+        pie.labels().position("outside");
+
+        pie.legend().title().enabled(true);
+        pie.legend().title()
+                .text("Варианты ответов")
+                .padding(0d, 0d, 10d, 0d);
+
+
+
+
+        pie.legend()
+                .position("center-bottom")
+                .itemsLayout(LegendLayout.HORIZONTAL)
+                .align(Align.CENTER);
+
+        pie.data(dataEntries);
+
+        chartView.setChart(pie);
+
+
+
     }
 }
