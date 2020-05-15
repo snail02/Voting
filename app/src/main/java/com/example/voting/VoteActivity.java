@@ -27,9 +27,6 @@ public class VoteActivity extends AppCompatActivity {
     Button neutral;
     String address;
 
-    boolean check;
-
-
     Vote vote;
     Credentials credentials;
     ProgressBar progressbar;

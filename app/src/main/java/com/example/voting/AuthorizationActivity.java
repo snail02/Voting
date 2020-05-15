@@ -34,15 +34,12 @@ public class AuthorizationActivity extends AppCompatActivity {
     EditText email;
     EditText pass;
 
-
-
     FirebaseAuth auth;
     FirebaseDatabase database;
     DatabaseReference users;
 
     LinearLayout linearLayout;
     ProgressBar progressBar;
-
 
 
     @Override
@@ -85,8 +82,6 @@ public class AuthorizationActivity extends AppCompatActivity {
                     public void onSuccess(AuthResult authResult) {
                         Intent myIntent = new Intent(AuthorizationActivity.this,  MainActivity.class);
                         AuthorizationActivity.this.startActivity(myIntent);
-
-
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override

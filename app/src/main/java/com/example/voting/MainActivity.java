@@ -74,56 +74,11 @@ import jnr.ffi.annotations.In;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    List<VotingCard> listCard = new ArrayList<>();
-
     ViewPager viewPager;
     TabLayout tabLayout;
     MyFragmetPagerAdapter pagerAdapter;
 
-
-    //String connectUrl = "https://ropsten.infura.io/v3/6217c9661e8143cdad94007434e30c43";
     Web3j web3j;
-    Vote vote;
-    //private final static String PRIVATE_KEY = "243f16f0f8e5ba62faa8405324087d50a70e5a7f96081f8b5cfe585baf9984b3";
-
-
-    /*public Web3j connect(String url){
-         web3j = Web3j.build(new HttpService(url));
-        try {
-            Web3ClientVersion clientVersion = web3j.web3ClientVersion().sendAsync().get();
-            String web3ClientVersionString = clientVersion.getWeb3ClientVersion();
-
-            if (!clientVersion.hasError()) {
-                Log.d("mytest","Connected web3ClientVersion = " + web3ClientVersionString);
-            } else {
-                Log.d("mytest","No Connected");
-            }
-        } catch (Exception e) {
-            Log.d("mytest","Error " + e.getMessage());
-        }
-
-        return web3j;
-    }*/
-
-
-
-    static BigInteger getGasPrice(Web3j w3) throws IOException {
-        EthGasPrice ethGasPrice = w3.ethGasPrice().send();
-        return ethGasPrice.getGasPrice();
-
-    }
-
-  /*  static Vote deploy(Credentials credentials, Web3j w3) throws Exception {
-        String nameQ = "nameQ";
-        String descQ = "descQ";
-        ArrayList<String> list = new ArrayList<>();
-        list.add("da");
-        list.add("net");
-        return Vote.deploy(w3, credentials, contractGasProvider, nameQ, descQ, list).send();
-    }
-
-*/
 
     private void setupBouncyCastle() {
         final Provider provider = Security.getProvider(BouncyCastleProvider.PROVIDER_NAME);
@@ -187,37 +142,12 @@ public class MainActivity extends AppCompatActivity {
         tabLayout=findViewById(R.id.tabLayout);
         pagerAdapter = new MyFragmetPagerAdapter(getSupportFragmentManager());
 
-      //  VotingCard vc = new VotingCard();
-     //   listCard.add(vc);
-
-     //   pagerAdapter.activeVotes(listCard);
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-
-
-
-        //connect(connectUrl);
         web3j = VoteApplication.getInstance().getWeb3j();
 
-
-       /* listCard.add(vc);
-        listCard.add(vc);
-        listCard.add(vc);
-        listCard.add(vc);
-        listCard.add(vc);
-        listCard.add(vc);
-        listCard.add(vc);*/
-
-
-
-
-
-
-
-
         DatabaseReference myRef = VoteApplication.getInstance().myRef;
-       // DatabaseReference myRef = VoteApplication.getInstance().database;
         Query myQuery = myRef;
 
 
@@ -235,12 +165,6 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<VotingCard> list2 = new ArrayList<>();
                 list2.add(vc);
                 pagerAdapter.activeVotes(list2);
-
-                //adapterCard.addCard(vc);
-               // recyclerVotingCard.setAdapter(adapterCard);
-
-
-
 
             }
 
@@ -264,12 +188,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
-
 
     }
 }

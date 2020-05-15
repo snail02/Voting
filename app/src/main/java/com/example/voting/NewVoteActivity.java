@@ -44,11 +44,7 @@ public class NewVoteActivity extends AppCompatActivity {
 
     Credentials credentials;
 
-
-
     ArrayList<String> variant = new ArrayList<String>();
-
-    //private final static String PRIVATE_KEY = "243f16f0f8e5ba62faa8405324087d50a70e5a7f96081f8b5cfe585baf9984b3";
 
     private final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
     private final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
@@ -74,13 +70,10 @@ public class NewVoteActivity extends AppCompatActivity {
         }
     };
 
-    ArrayList<String> address = new ArrayList<>();
-
     static Vote deploy(Credentials credentials, Web3j w3, String name, String desc, ArrayList<String> list) throws Exception {
         return Vote.deploy(w3, credentials, contractGasProvider, name, desc, list).send();
 
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,15 +89,7 @@ public class NewVoteActivity extends AppCompatActivity {
         variant.add("Net");
         variant.add("Vozderjalsya");
 
-
-
-
-
-
-
-
         credentials = Credentials.create(VoteApplication.getInstance().PRIVATE_KEY);
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -120,8 +105,6 @@ public class NewVoteActivity extends AppCompatActivity {
                     public void run() {
                         String name = nameVote.getText().toString();
                         String desc = descVote.getText().toString();
-                        //test.setText(name + "  " + desc);
-                       // address.add("0x87a851a5E1852eaBA8a2124AF4FdBbc0ce73c8AB");
 
                         try {
                             vote = deploy(credentials, web3j,name, desc, variant);

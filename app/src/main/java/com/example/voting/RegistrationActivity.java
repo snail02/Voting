@@ -165,31 +165,4 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-/*    public void signin(String email , String password)
-    {
-        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    Toast.makeText(RegistrationActivity.this, "Aвторизация успешна", Toast.LENGTH_SHORT).show();
-                }else
-                    Toast.makeText(RegistrationActivity.this, "Aвторизация провалена", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-    }
-    public void registration (String email , String password){
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful())
-                {
-                    Toast.makeText(RegistrationActivity.this, "Регистрация успешна", Toast.LENGTH_SHORT).show();
-                }
-                else
-                    Toast.makeText(RegistrationActivity.this, "Регистрация провалена", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/
-
 }
