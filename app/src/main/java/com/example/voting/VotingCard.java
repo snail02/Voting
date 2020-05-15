@@ -14,6 +14,7 @@ public class VotingCard implements Serializable {
     public String name;
     public String descripton;
     public String address;
+    public String id;
     public boolean statusActive;
     public boolean statusVoted;
 
@@ -25,11 +26,12 @@ public class VotingCard implements Serializable {
         statusVoted = true;
     }
 
-    VotingCard(String name, String descripton, String address){
+    VotingCard(String name, String descripton, String address, boolean statusActive, String id){
         this.name = name;
         this.descripton = descripton;
         this.address = address;
-        statusActive = true;
+        this.statusActive = statusActive;
+        this.id = id;
         statusVoted = true;
     }
 
@@ -47,6 +49,9 @@ public class VotingCard implements Serializable {
     public String getName(){ return name; }
     public String getDescription(){ return descripton; }
     public String getAddress(){ return address; }
+    public String getId(){
+        return id;
+    }
 
     public String getStatusActive(){
         if(statusActive)
@@ -61,4 +66,7 @@ public class VotingCard implements Serializable {
             return "Вы не голосовали";
     }
 
+    public boolean isStatusActive() {
+        return statusActive;
+    }
 }

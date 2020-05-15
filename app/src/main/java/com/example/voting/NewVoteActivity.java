@@ -39,7 +39,8 @@ public class NewVoteActivity extends AppCompatActivity {
     ArrayList<User> listUser = new ArrayList<>();  // список пользователей (кроме текущего аккаунту)
     ArrayList<String> listUserInfo = new ArrayList<>(); // список фио пользователей (кроме текущего аккаунту)
     ArrayList<String> listUserAddress = new ArrayList<>(); // список public key пользователей (кроме текущего аккаунту)
-    ArrayList<String> listSelected = new ArrayList<>(); // список выбранных данных
+    ArrayList<String> listSelectedAddress = new ArrayList<>(); // адреса выбранные пользователей
+    ArrayList<String> listSelectedFullName = new ArrayList<>(); // ФИО выбранных пользователей
 
 
     TextView nameVote;
@@ -87,7 +88,6 @@ public class NewVoteActivity extends AppCompatActivity {
 
     static Vote deploy(Credentials credentials, Web3j w3, String name, String desc, ArrayList<String> list) throws Exception {
         return Vote.deploy(w3, credentials, contractGasProvider, name, desc, list).send();
-
     }
 
     @Override
@@ -125,12 +125,11 @@ public class NewVoteActivity extends AppCompatActivity {
         mJRSpinner.setOnSelectMultipleListener(new JRSpinner.OnSelectMultipleListener() {
             @Override
             public void onMultipleSelected(List<Integer> selectedPosition) {
-                Log.d("mytest", "position " + selectedPosition);
-                Log.d("mytest", "selectedUsers " + selectedUsers(listUserInfo, selectedPosition));
-                listSelected = selectedUsers(listUserAddress, selectedPosition);
-                Log.d("mytest", "selectedUsersAddress " + listSelected);
-
-
+                //Log.d("mytest", "position " + selectedPosition);
+                //Log.d("mytest", "selectedUsers " + selectedUsers(listUserInfo, selectedPosition));
+                listSelectedAddress = selectedUsers(listUserAddress, selectedPosition);
+                //Log.d("mytest", "selectedUsersAddress " + listSelectedAddress);
+                listSelectedFullName = selectedUsers(listUserInfo, selectedPosition);
             }
         });
 
@@ -146,14 +145,15 @@ public class NewVoteActivity extends AppCompatActivity {
 
                         try {
                             vote = deploy(credentials, web3j, name, desc, variant);
-                            if(listSelected!=null) {
-                                vote.giveRightToVote(listSelected).send();
+                            if(listSelectedAddress!=null) {
+                                vote.giveRightToVote(listSelectedAddress).send();
                             }
 
-                            Log.d("mytest", "listUserAddress " + listUserAddress);
+                            Log.d("mytest", "---CREATE NEW VOTE---");
+                            Log.d("mytest", "User with right " + listSelectedFullName);
+                            Log.d("mytest", "vote address " + vote.getContractAddress());
                             Log.d("mytest", "totalVoters " + vote.getTotalVoters().send());
                             Log.d("mytest", "currentVoters " + vote.getCurrentVoters().send());
-                            Log.d("mytest", "vote address " + vote.getContractAddress());
                             Log.d("mytest", "getMyVote() " + vote.getMyVote().send());
 
                             SmartContract contract = new SmartContract(vote.getContractAddress(), name, desc);
@@ -177,18 +177,15 @@ public class NewVoteActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     if(!listUserAddress.isEmpty()){
-                        listSelected=listUserAddress;
+                        listSelectedAddress=listUserAddress;
                     }
                     mJRSpinner.setVisibility(View.GONE);
                 } else {
                     if (!listUserInfo.isEmpty()) {
-
                         String[] arrayString = listUserInfo.toArray(new String[0]);
                         mJRSpinner.setItems(arrayString);
-
                         mJRSpinner.setVisibility(View.VISIBLE);
                     }
-
                 }
             }
         });
@@ -198,15 +195,11 @@ public class NewVoteActivity extends AppCompatActivity {
         ArrayList<String> result = new ArrayList<>();
         for (int i = 0; i < selectedPosition.size(); i++) {
             result.add(users.get(selectedPosition.get(i).intValue()));
-
         }
         return result;
-
-
     }
 
     public void getAllUsers() {
-
         Thread thread = new Thread(new Runnable() {
             DatabaseReference myRef = VoteApplication.getInstance().users;
             Query myQuery = myRef;
@@ -214,19 +207,16 @@ public class NewVoteActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-
                     myQuery.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                             User user = dataSnapshot.getValue(User.class);
-                            Log.d("mytest",dataSnapshot.getKey());
                             if(!VoteApplication.getInstance().auth.getCurrentUser().getUid().equals(dataSnapshot.getKey())) {
                                 listUser.add(user);
                                 listUserInfo.add(user.getInfo());
                                 listUserAddress.add(user.getPublicKey());
                             }
-
                         }
 
                         @Override
@@ -249,20 +239,11 @@ public class NewVoteActivity extends AppCompatActivity {
 
                         }
                     });
-
-
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
         thread.start();
-
     }
-
-
 }

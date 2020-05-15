@@ -26,7 +26,7 @@ public class VoteApplication extends Application {
     DatabaseReference myRef ;
     FirebaseAuth auth;
     DatabaseReference users;
-    String connectUrl = "HTTP://192.168.0.112:7545";
+    String connectUrl = "HTTP://192.168.0.103:7545";
     String PRIVATE_KEY;
     User user = new User();
     UserInfoListener listener;
@@ -96,7 +96,6 @@ public class VoteApplication extends Application {
         } catch (Exception e) {
             Log.d("mytest","Connect error: " + e.getMessage());
         }
-
         return web3j;
     }
 
@@ -106,14 +105,10 @@ public class VoteApplication extends Application {
 
     public void getUserFromFB() {
         if (auth.getCurrentUser() != null) {
-
-
             Thread thread = new Thread(new Runnable() {
-
                 @Override
                 public void run() {
                     try {
-
                         DatabaseReference mDatabase = users;
                         mDatabase.child(auth.getCurrentUser().getUid()).addListenerForSingleValueEvent(
                                 new ValueEventListener() {
@@ -127,9 +122,7 @@ public class VoteApplication extends Application {
                                             Log.d("mytest","secretary false" );
                                         Log.d("mytest","name " + user.getName());
                                         listener.onInfoLoaded(user);
-
                                     }
-
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
 
@@ -142,18 +135,10 @@ public class VoteApplication extends Application {
                 }
             });
             thread.start();
-
-
         }
         else{
-
         }
     }
-
-
-
-
-
 }
 
 interface UserInfoListener{

@@ -106,6 +106,4 @@ public class AuthorizationActivity extends AppCompatActivity {
 
         return "successful";
     }
-
-
 }

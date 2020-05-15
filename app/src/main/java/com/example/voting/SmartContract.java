@@ -57,6 +57,10 @@ public class SmartContract {
         this.description = description;
     }
 
+    public void setStatusActive(boolean statusActive){
+        this.statusActive = statusActive;
+    }
+
     public boolean isStatusActive() {
         return statusActive;
     }

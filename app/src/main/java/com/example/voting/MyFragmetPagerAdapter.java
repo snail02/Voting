@@ -17,7 +17,6 @@ public class MyFragmetPagerAdapter extends FragmentPagerAdapter {
         super(fm);
         activeVoteFragment = ActiveVoteFragment.newInstance();
         historyVoteFragment= HistoryVoteFragment.newInstance();
-
     }
 
 
@@ -30,7 +29,6 @@ public class MyFragmetPagerAdapter extends FragmentPagerAdapter {
         else {
             return historyVoteFragment;
         }
-
     }
 
     @Override
@@ -47,13 +45,13 @@ public class MyFragmetPagerAdapter extends FragmentPagerAdapter {
         else{
             return "Прошедшие";
         }
-
     }
 
     public void activeVotes(List<VotingCard> votes){
         activeVoteFragment.addVotes(votes);
-
     }
 
-
+    public void historyVotes(List<VotingCard> votes){
+        historyVoteFragment.addVotes(votes);
+    }
 }
