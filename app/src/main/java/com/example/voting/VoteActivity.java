@@ -49,14 +49,13 @@ public class VoteActivity extends AppCompatActivity {
         no = findViewById(R.id.variant_no_button);
         neutral = findViewById(R.id.variant_neutral_button);
 
-        progressbar=findViewById(R.id.progressBarVote);
-        constraintLayout=findViewById(R.id.voteActivityContent);
+        progressbar = findViewById(R.id.progressBarVote);
+        constraintLayout = findViewById(R.id.voteActivityContent);
 
         Bundle arguments = getIntent().getExtras();
         VotingCard card = (VotingCard) (arguments.getSerializable("card"));
         nameVote.setText(card.getName());
         descVote.setText(card.getDescription());
-
 
 
         address = card.getAddress();
@@ -66,8 +65,8 @@ public class VoteActivity extends AppCompatActivity {
 
         vote = Vote.load(address, VoteApplication.getInstance().getWeb3j(), credentials, VoteApplication.getInstance().contractGasProvider);
 
+        checkVoteInfo();
         checkVotes();
-
 
 
         yes.setOnClickListener(new View.OnClickListener() {
@@ -102,15 +101,15 @@ public class VoteActivity extends AppCompatActivity {
 
     }
 
-    public void checkVotes(){
+    public void checkVotes() {
         Thread thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
                 try {
                     String status = vote.getMyVote().send();
-                    Log.d("mytest","status "+ status);
-                    if(status.equals("You are not voted")){
+                    Log.d("mytest", "status " + status);
+                    if (status.equals("You are not voted")) {
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -125,8 +124,7 @@ public class VoteActivity extends AppCompatActivity {
                         });
 
 
-                    }
-                    else{
+                    } else {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -152,12 +150,33 @@ public class VoteActivity extends AppCompatActivity {
         thread.start();
     }
 
+    public void checkVoteInfo() {
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    Log.d("mytest", "totalVoters " + vote.getTotalVoters().send());
+                    Log.d("mytest", "currentVoters " + vote.getCurrentVoters().send());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        });
+        thread.start();
+    }
+
     public void sendVote(int index) {
         Thread thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
                 try {
+
+
                     vote.vote(BigInteger.valueOf(index)).send();
 
                     runOnUiThread(new Runnable() {
@@ -183,15 +202,7 @@ public class VoteActivity extends AppCompatActivity {
         thread.start();
 
 
-
     }
-
-
-
-
-
-
-
 
 
 }

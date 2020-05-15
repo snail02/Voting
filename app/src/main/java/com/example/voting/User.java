@@ -22,6 +22,12 @@ public class User {
 
     }
 
+    public String getInfo(){
+        String result="";
+        result+=getFam() + " " + getName()+ " " +getPat();
+        return result;
+    }
+
     public String getName() {
         return name;
     }

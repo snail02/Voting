@@ -150,12 +150,6 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference myRef = VoteApplication.getInstance().myRef;
         Query myQuery = myRef;
 
-
-
-
-
-
-
         myQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {

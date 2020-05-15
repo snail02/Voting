@@ -41,5 +41,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
 
+    implementation 'com.github.jrizani:JRSpinner:1.0.0'
+
 
 }

@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".NewVoteActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/newVoteActivityContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        tools:context=".VoteActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -59,7 +66,39 @@
             android:layout_height="wrap_content"
             android:text="TextView" />
 
+        <Switch
+            android:id="@+id/switchAllUsers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Дать доступ всем пользователям" />
+
+        <jrizani.jrspinner.JRSpinner
+            android:id="@+id/mySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Выберите пользователей"
+            android:textColor="@color/colorPrimary"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorPrimary"
+            app:jrs_title="Choose"
+            app:jrs_multiple="true"
+            app:jrs_icon_tint="@color/colorPrimary"/>
 
 
     </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarNewVote"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
