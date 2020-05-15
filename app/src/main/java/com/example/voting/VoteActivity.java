@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.os.Bundle;
 import android.renderscript.Sampler;
 import android.util.Log;
+import android.util.Printer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -22,11 +23,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 
+import org.web3j.abi.datatypes.Int;
 import org.web3j.crypto.Credentials;
 import org.web3j.tuples.Tuple;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class VoteActivity extends AppCompatActivity {
@@ -39,6 +43,11 @@ public class VoteActivity extends AppCompatActivity {
     Button neutral;
     String address;
     String idCard;
+    String status;
+
+    int yesCount;
+    int noCount;
+    int vozderjalsya_count;
 
     boolean isActive = true;
     boolean isLastVoters = false;
@@ -89,6 +98,8 @@ public class VoteActivity extends AppCompatActivity {
         checkVotes();
 
 
+
+
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,71 +124,90 @@ public class VoteActivity extends AppCompatActivity {
     }
 
     public void checkVotes() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String status;
+        if (!isActive) {
+            getResultVote();
+            messageForUser.setText("Голосование закрыто");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
                     try {
-                        status = vote.getMyVote().send();
+                        progressbar.setVisibility(View.GONE);
+                        constraintLayout.setVisibility(View.GONE);
+                        messageForUser.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    catch (Exception e){
-                        status = "Вы не можете голосовать";
-
-                    }
-                    Log.d("mytest", "status " + status);
-                    if (status.equals("You are not voted")) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    progressbar.setVisibility(View.GONE);
-                                    constraintLayout.setVisibility(View.VISIBLE);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                    } else {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    progressbar.setVisibility(View.GONE);
-                                    constraintLayout.setVisibility(View.GONE);
-
-                                    if(!isActive){
-                                        messageForUser.setText("Голосование закрыто");
-                                    }
-                                    messageForUser.setVisibility(View.VISIBLE);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        });
-        thread.start();
+            });
+
+        } else {
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+
+                        try {
+                            status = vote.checkRight().send();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            status = "Вы не можете голосовать";
+                        }
+
+                        Log.d("mytest", "status " + status);
+                        if (status.equals("You have right") && vote.getMyVote().send().equals("You are not voted")) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        progressbar.setVisibility(View.GONE);
+                                        constraintLayout.setVisibility(View.VISIBLE);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        progressbar.setVisibility(View.GONE);
+                                        constraintLayout.setVisibility(View.GONE);
+
+                                        if (status.equals("Has no right to vote")) {
+                                            messageForUser.setText("У вас нет доступа");
+                                        }
+                                        messageForUser.setVisibility(View.VISIBLE);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+        }
     }
 
     public void checkVoteInfo() {
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     BigInteger total = vote.getTotalVoters().send();
                     BigInteger current = vote.getCurrentVoters().send();
-
                     Log.d("mytest", "---OPEN VOTE ACTIVITY---");
                     Log.d("mytest", "totalVoters " + total);
                     Log.d("mytest", "currentVoters " + current);
                     Log.d("mytest", "my vote " + vote.getMyVote().send());
 
-                    if(total.intValue() - current.intValue() == 1){
+                    if (total.intValue() - current.intValue() == 1) {
                         isLastVoters = true;
                     }
 
@@ -186,8 +216,11 @@ public class VoteActivity extends AppCompatActivity {
                 }
             }
         });
+
         thread.start();
     }
+
+
 
     public void sendVote(int index) {
         Thread thread = new Thread(new Runnable() {
@@ -218,8 +251,31 @@ public class VoteActivity extends AppCompatActivity {
         thread.start();
     }
 
-    public String getResultVote(int index) throws Exception {
-        return "...";
+    public void printResultVote(){
+        if(!isActive){
+            Log.d("mytest", "da " +  yesCount);
+            Log.d("mytest", "net " +  noCount);
+            Log.d("mytest", "vozderjalsya " +  vozderjalsya_count);
+        }
+    }
+
+    public void getResultVote(){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+        try {
+
+            yesCount = vote.getCountVoteVariant(BigInteger.valueOf(0)).send().intValue();
+            noCount=vote.getCountVoteVariant(BigInteger.valueOf(1)).send().intValue();
+            vozderjalsya_count=vote.getCountVoteVariant(BigInteger.valueOf(2)).send().intValue();
+            printResultVote();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+            }
+        });
+        thread.start();
     }
 
     public void closeVote(){
