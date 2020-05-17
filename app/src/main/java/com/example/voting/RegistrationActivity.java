@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
@@ -49,6 +50,8 @@ public class RegistrationActivity extends AppCompatActivity {
     LinearLayout linearLayout;
     ProgressBar progressBar;
 
+    private long mLastClickTime = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +79,10 @@ public class RegistrationActivity extends AppCompatActivity {
         buttonRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 if(checkData().equals("successful")) {
                     //Регистрация
                     registration();
@@ -126,6 +133,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
     public String checkData(){
+
+        String passStr = pass.getText().toString();
+        String confStr = confirmPass.getText().toString();
         if(TextUtils.isEmpty(email.getText().toString())){
 
             return "Введите вашу почту";
@@ -156,9 +166,9 @@ public class RegistrationActivity extends AppCompatActivity {
             return "Введите пароль, который более 5 символов";
         }
 
-        if(pass.getText().equals(confirmPass.getText())){
+        if(!passStr.equals(confStr)){
 
-            return pass.getText().toString() + "" + confirmPass.getText().toString();
+            return "Пароли на совпадают";
         }
 
         return "successful";

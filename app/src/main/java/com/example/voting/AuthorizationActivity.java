@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -41,6 +42,8 @@ public class AuthorizationActivity extends AppCompatActivity {
     LinearLayout linearLayout;
     ProgressBar progressBar;
 
+    private long mLastClickTime = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,10 @@ public class AuthorizationActivity extends AppCompatActivity {
         buttonAuthorization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 if (checkData().equals("successful")){
                     signIn();
                 }

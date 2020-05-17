@@ -2,6 +2,7 @@ package com.example.voting;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.List;
 public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.VotingCardViewHolder> {
 
     private List<VotingCard> card;
+    private long mLastClickTime = 0;
     VotingCardAdapter(){
 
     }
@@ -57,6 +59,10 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
             public void onClick(View view, int position) {
                 /*Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 openVoteActivity(view.getContext(), position);
             }
         });
@@ -65,6 +71,24 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
     @Override
     public int getItemCount() {
         return card.size();
+    }
+
+    private Integer searchById(String id){
+        for (int i = 0; i < getItemCount(); i++){
+            if(card.get(i).getId() == id){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void removeById(String id) {
+        int position = searchById(id);
+        if(position == -1)
+            return;
+        card.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, card.size());
     }
 
     public class VotingCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -98,6 +122,6 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
     }
 
     public void addCards(List<VotingCard> list){
-        card.addAll(list);
+        card.addAll(0, list);
     }
 }

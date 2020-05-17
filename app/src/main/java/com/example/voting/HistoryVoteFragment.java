@@ -64,4 +64,9 @@ public class HistoryVoteFragment extends Fragment {
         adapterCard.addCards(votes);
         adapterCard.notifyDataSetChanged();
     }
+
+    public void updateAdapterCard(){
+        adapterCard = new VotingCardAdapter(new ArrayList<>());
+        recyclerVotingCard.setAdapter(adapterCard);
+    }
 }

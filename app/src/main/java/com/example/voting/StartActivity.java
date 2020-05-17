@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -20,6 +21,8 @@ public class StartActivity extends AppCompatActivity {
     Button buttonAuthorization;
     ProgressBar progressbar;
     ConstraintLayout constraintLayout;
+
+    private long mLastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,10 @@ public class StartActivity extends AppCompatActivity {
         buttonRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 Intent myIntent = new Intent(StartActivity.this, RegistrationActivity.class);
                 StartActivity.this.startActivity(myIntent);
             }
@@ -52,6 +59,10 @@ public class StartActivity extends AppCompatActivity {
         buttonAuthorization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 Intent myIntent = new Intent(StartActivity.this, AuthorizationActivity.class);
                 StartActivity.this.startActivity(myIntent);
             }

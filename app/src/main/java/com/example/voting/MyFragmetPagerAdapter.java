@@ -54,4 +54,8 @@ public class MyFragmetPagerAdapter extends FragmentPagerAdapter {
     public void historyVotes(List<VotingCard> votes){
         historyVoteFragment.addVotes(votes);
     }
+
+    public void updateActiveVotes(){
+        //activeVoteFragment.updateAdapterCard();
+    }
 }

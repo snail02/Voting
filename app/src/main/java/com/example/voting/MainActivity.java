@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     MyFragmetPagerAdapter pagerAdapter;
 
+    VotingCardAdapter cardHistory;
+    VotingCardAdapter cardActive;
+
     Web3j web3j;
 
     private void setupBouncyCastle() {
@@ -101,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+
+
         web3j = VoteApplication.getInstance().getWeb3j();
 
         DatabaseReference myRef = VoteApplication.getInstance().myRef;
@@ -109,24 +114,34 @@ public class MainActivity extends AppCompatActivity {
         myQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
                 SmartContract contract = dataSnapshot.getValue(SmartContract.class);
                 VotingCard vc = new VotingCard(contract.getName(), contract.getDescription(), contract.getAddress(), contract.isStatusActive(), dataSnapshot.getKey());
                 ArrayList<VotingCard> listActive = new ArrayList<>();
                 ArrayList<VotingCard> listPassive = new ArrayList<>();
                 if(vc.isStatusActive()){
-                    listActive.add(vc);
+                    listActive.add(0, vc);
                     pagerAdapter.activeVotes(listActive);
                 }
                 else{
-                    listPassive.add(vc);
+                    listPassive.add(0, vc);
                     pagerAdapter.historyVotes(listPassive);
                 }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                SmartContract contract = dataSnapshot.getValue(SmartContract.class);
+                VotingCard vc = new VotingCard(contract.getName(), contract.getDescription(), contract.getAddress(), contract.isStatusActive(), dataSnapshot.getKey());
+                ArrayList<VotingCard> listActive = new ArrayList<>();
+                ArrayList<VotingCard> listPassive = new ArrayList<>();
+                if(vc.isStatusActive()){
+                    listActive.add(0,vc);
+                    pagerAdapter.activeVotes(listActive);
+                }
+                else{
+                    listPassive.add(0, vc);
+                    pagerAdapter.historyVotes(listPassive);
+                }
             }
 
             @Override

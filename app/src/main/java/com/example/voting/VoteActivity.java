@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.renderscript.Sampler;
 import android.util.Log;
 import android.util.Printer;
@@ -55,6 +57,8 @@ public class VoteActivity extends AppCompatActivity {
     String address;
     String idCard;
     String status;
+
+    private long mLastClickTime = 0;
 
     AnyChartView chartView;
 
@@ -118,13 +122,22 @@ public class VoteActivity extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 sendVote(0);
+                //returnOnMainActivity();
             }
         });
 
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 sendVote(1);
             }
         });
@@ -132,10 +145,18 @@ public class VoteActivity extends AppCompatActivity {
         neutral.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 sendVote(2);
-
             }
         });
+    }
+
+    public  void returnOnMainActivity(){
+        Intent myIntent = new Intent(VoteActivity.this, MainActivity.class);
+        VoteActivity.this.startActivity(myIntent);
     }
 
     public void checkVotes() {
@@ -267,7 +288,7 @@ public class VoteActivity extends AppCompatActivity {
                             }
                         }
                     });
-
+                    returnOnMainActivity();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -357,7 +378,7 @@ public class VoteActivity extends AppCompatActivity {
         pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
             @Override
             public void onClick(Event event) {
-                Toast.makeText(chartView.getContext(), event.getData().get("x") + ":" + event.getData().get("value"), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(chartView.getContext(), event.getData().get("x") + ":" + event.getData().get("value"), Toast.LENGTH_SHORT).show();
             }
         });
 

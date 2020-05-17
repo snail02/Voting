@@ -8,6 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -47,6 +48,8 @@ public class NewVoteActivity extends AppCompatActivity {
     TextView descVote;
     Button createVote;
     Switch allUsersSwitch;
+
+    private long mLastClickTime = 0;
 
     ProgressBar progressbar;
     ConstraintLayout constraintLayout;
@@ -137,6 +140,10 @@ public class NewVoteActivity extends AppCompatActivity {
         createVote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {

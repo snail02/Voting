@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,8 @@ public class ActiveVoteFragment extends Fragment implements UserInfoListener{
 
     ProgressBar progressbar;
     ConstraintLayout constraintLayout;
+
+    private long mLastClickTime = 0;
 
     String connectUrl = VoteApplication.getInstance().connectUrl;
 
@@ -170,6 +173,10 @@ public class ActiveVoteFragment extends Fragment implements UserInfoListener{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 createNewVote();
             }
         });
@@ -188,6 +195,11 @@ public class ActiveVoteFragment extends Fragment implements UserInfoListener{
         if(adapterCard==null) {
             adapterCard = new VotingCardAdapter(new ArrayList<>());
         }
+        adapterCard.addCards(votes);
+        adapterCard.notifyDataSetChanged();
+    }
+
+    public void updateAdapterCard(List<VotingCard> votes){
         adapterCard.addCards(votes);
         adapterCard.notifyDataSetChanged();
     }
