@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
 
-
         web3j = VoteApplication.getInstance().getWeb3j();
 
         DatabaseReference myRef = VoteApplication.getInstance().myRef;
@@ -158,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+
         });
 
     }

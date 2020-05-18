@@ -5,7 +5,7 @@ public class SmartContract {
     private String name;
     private String description;
     private boolean statusActive;
-    private boolean statusVoted;
+    //private boolean statusVoted;
 
 
     SmartContract(){
@@ -13,7 +13,7 @@ public class SmartContract {
         this.name=null;
         this.description=null;
         this.statusActive=true;
-        this.statusVoted=false;
+        //this.statusVoted=false;
     }
 
     SmartContract(String address, String name, String description ){
@@ -21,7 +21,7 @@ public class SmartContract {
         this.name=name;
         this.description=description;
         this.statusActive=true;
-        this.statusVoted=false;
+        //this.statusVoted=false;
     }
 
     SmartContract(String address, String name, String description, boolean statusActive, boolean statusVoted ){
@@ -29,7 +29,7 @@ public class SmartContract {
         this.name=name;
         this.description=description;
         this.statusActive=statusActive;
-        this.statusVoted=statusVoted;
+        //this.statusVoted=statusVoted;
     }
 
 
@@ -65,7 +65,7 @@ public class SmartContract {
         return statusActive;
     }
 
-    public boolean isStatusVoted() {
-        return statusVoted;
-    }
+    //public boolean isStatusVoted() {
+    //    return statusVoted;
+   // }
 }

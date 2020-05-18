@@ -152,7 +152,7 @@ public class NewVoteActivity extends AppCompatActivity {
 
                         try {
                             vote = deploy(credentials, web3j, name, desc, variant);
-                            if(listSelectedAddress!=null) {
+                            if(!listSelectedAddress.isEmpty()) {
                                 vote.giveRightToVote(listSelectedAddress).send();
                             }
 
