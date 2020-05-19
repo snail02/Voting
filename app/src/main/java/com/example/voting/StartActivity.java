@@ -67,6 +67,8 @@ public class StartActivity extends AppCompatActivity {
                 StartActivity.this.startActivity(myIntent);
             }
         });
+
+
     }
 
 

@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.santalu.maskedittext.MaskEditText;
 
 import java.security.PublicKey;
 
@@ -36,7 +37,7 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText name;
     EditText pat;
     EditText email;
-    EditText phone;
+    MaskEditText phone;
     EditText pass;
     EditText confirmPass;
 
@@ -106,7 +107,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 user.setName(name.getText().toString());
                 user.setPat(pat.getText().toString());
                 user.setEmail(email.getText().toString());
-                user.setPhone(phone.getText().toString());
+                user.setPhone("+7" + phone.getRawText());
                 user.setPass(pass.getText().toString());
                 user.setPrivateKey(privateKey.getText().toString());
                 user.setPublicKey(publicKey.getText().toString());

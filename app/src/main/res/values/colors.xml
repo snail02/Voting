@@ -4,11 +4,17 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
+    <color name="myColorPrimary">#90e0ef</color>
+    <color name="myColorPrimaryDark">#00b4d8</color>
+    <color name="myColorAccent">#00b4d8</color>
+
     <color name="blue">#3F92D2</color>
     <color name="lightBlue">#caf0f8</color>
     <color name="darkBlue">#90e0ef</color>
     <color name="white">#ffff</color>
     <color name="black">#000000</color>
+
+
 
 
 </resources>

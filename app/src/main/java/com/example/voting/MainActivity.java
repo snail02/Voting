@@ -84,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
     private void signOut(){
         FirebaseAuth.getInstance().signOut();
         finish();
-        startActivity(new Intent(this, StartActivity.class));
+        startActivity(new Intent(this, StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK ));
+
     }
 
     @Override
