@@ -5,7 +5,10 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="blue">#3F92D2</color>
-    <color name="lightblue">#66A3D2</color>
-    <color name="darkblue">#0B61A4</color>
+    <color name="lightBlue">#caf0f8</color>
+    <color name="darkBlue">#90e0ef</color>
+    <color name="white">#ffff</color>
+    <color name="black">#000000</color>
+
 
 </resources>

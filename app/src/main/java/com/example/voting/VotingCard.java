@@ -16,14 +16,12 @@ public class VotingCard implements Serializable {
     public String address;
     public String id;
     public boolean statusActive;
-    public boolean statusVoted;
 
     VotingCard(){
         name = "Вопрос";
         descripton = "Описание";
         address = "адрес";
         statusActive = true;
-        statusVoted = true;
     }
 
     VotingCard(String name, String descripton, String address, boolean statusActive, String id){
@@ -32,7 +30,6 @@ public class VotingCard implements Serializable {
         this.address = address;
         this.statusActive = statusActive;
         this.id = id;
-        statusVoted = true;
     }
 
     VotingCard(Vote vote) throws Exception {
@@ -43,7 +40,6 @@ public class VotingCard implements Serializable {
         name = vote.getVoteName().send();
         descripton = vote.getVoteDescription().send();
         statusActive = true;
-        statusVoted = true;
     }
 
     public String getName(){ return name; }
@@ -58,12 +54,6 @@ public class VotingCard implements Serializable {
             return "Голосование открыто;";
         else
             return "Голосование закрыто";
-    }
-    public String getStatusVoted(){
-        if(statusVoted)
-            return "Вы голосовали";
-        else
-            return "Вы не голосовали";
     }
 
     public boolean isStatusActive() {

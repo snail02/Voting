@@ -300,6 +300,7 @@ public class VoteActivity extends AppCompatActivity {
     public void printResultVote() {
         if (!isActive) {
 
+
             for (int i = 0; i < VoteApplication.getInstance().variant.size(); i++) {
                 Log.d("mytest", VoteApplication.getInstance().variant.get(i) + " " + countVotesForVariant.get(i));
             }
@@ -308,6 +309,7 @@ public class VoteActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
+                        chartView.setVisibility(View.VISIBLE);
                         setupPieChart(VoteApplication.getInstance().variant,countVotesForVariant);
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -51,8 +51,6 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
         VotingCard votingCard = card.get(position);
         holder.nameView.setText(votingCard.getName());
         holder.descView.setText(votingCard.getDescription());
-        holder.activeView.setText(votingCard.getStatusActive());
-        holder.votedView.setText(votingCard.getStatusVoted());
 
         holder.setCardVoteClickListener(new CardVoteClickListener() {
             @Override
@@ -93,7 +91,7 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
 
     public class VotingCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView nameView, descView, activeView, votedView;
+        TextView nameView, descView;
         private CardVoteClickListener cardVoteClickListener;
 
         public VotingCardViewHolder(@NonNull View itemView){
@@ -101,8 +99,6 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
 
             nameView = (TextView) itemView.findViewById(R.id.name);
             descView = (TextView) itemView.findViewById(R.id.description);
-            activeView = (TextView) itemView.findViewById(R.id.active);
-            votedView = (TextView) itemView.findViewById(R.id.voted);
 
             itemView.setOnClickListener(this);
         }

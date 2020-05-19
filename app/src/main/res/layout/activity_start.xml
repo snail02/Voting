@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lightBlue"
     tools:context=".StartActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,24 +28,29 @@
 
         <Button
             android:id="@+id/button_authorization"
-            android:layout_width="182dp"
-            android:layout_height="49dp"
+            android:layout_width="210dp"
+            android:layout_height="60dp"
             android:layout_marginTop="40dp"
-            android:text="Войти"
+            android:text="Авторизация"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.506"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_registration" />
+            app:layout_constraintTop_toBottomOf="@+id/button_registration"
+            android:background="@drawable/button_style" />
 
         <Button
             android:id="@+id/button_registration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="210dp"
+            android:layout_height="60dp"
             android:layout_marginTop="120dp"
-            android:text="Зарегистрироваться"
+            android:text="Регистрация"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            android:background="@drawable/button_style" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

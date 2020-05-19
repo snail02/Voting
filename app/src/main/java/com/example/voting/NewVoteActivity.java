@@ -101,7 +101,6 @@ public class NewVoteActivity extends AppCompatActivity {
         nameVote = findViewById(R.id.edit_name_vote);
         descVote = findViewById(R.id.edit_desc_vote);
         createVote = findViewById(R.id.button_new_vote);
-        test = findViewById(R.id.textView);
 
         allUsersSwitch = findViewById(R.id.switchAllUsers);
 

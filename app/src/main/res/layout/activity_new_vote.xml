@@ -16,6 +16,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <include
@@ -28,6 +29,8 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/black"
             android:text="Введите тему голосования:" />
 
         <EditText
@@ -36,12 +39,15 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Тема" />
+            android:hint="Тема"
+            />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/black"
             android:text="Введите описание голосования:" />
 
         <EditText
@@ -52,25 +58,16 @@
             android:gravity="start|top"
             android:inputType="textMultiLine"
             android:lines="5"
-            android:text="Описание" />
-
-        <Button
-            android:id="@+id/button_new_vote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Создать" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:hint="Описание"
+            />
 
         <Switch
             android:id="@+id/switchAllUsers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:text="Дать доступ всем пользователям" />
 
         <jrizani.jrspinner.JRSpinner
@@ -80,10 +77,23 @@
             android:hint="Выберите пользователей"
             android:textColor="@color/colorPrimary"
             android:visibility="gone"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             app:backgroundTint="@color/colorPrimary"
-            app:jrs_title="Choose"
+            app:jrs_title="Выберите голосующих"
             app:jrs_multiple="true"
             app:jrs_icon_tint="@color/colorPrimary"/>
+
+        <Button
+            android:id="@+id/button_new_vote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/button_style"
+            android:text="Создать" />
 
 
     </LinearLayout>
@@ -96,6 +106,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:visibility="gone"
         android:layout_width="50dp"
         android:layout_height="50dp"/>

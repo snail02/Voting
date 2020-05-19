@@ -37,7 +37,6 @@ import java.util.List;
 
 public class ActiveVoteFragment extends Fragment implements UserInfoListener{
 
-    Button buttonDeploy;
     RecyclerView recyclerVotingCard;
     FloatingActionButton fab;
     VotingCardAdapter adapterCard;
@@ -76,7 +75,6 @@ public class ActiveVoteFragment extends Fragment implements UserInfoListener{
         progressbar = view.findViewById(R.id.progressBarActiveVote);
         constraintLayout = view.findViewById(R.id.activeVoteActivityContent);
 
-        buttonDeploy = (Button) view.findViewById(R.id.buttonDeploy);
         fab = view.findViewById(R.id.create_button);
 
         recyclerVotingCard = view.findViewById(R.id.list);
@@ -86,89 +84,6 @@ public class ActiveVoteFragment extends Fragment implements UserInfoListener{
             adapterCard = new VotingCardAdapter(new ArrayList<>());
         }
         recyclerVotingCard.setAdapter(adapterCard);
-
-
-        buttonDeploy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-
-                            /////////////////////
-                           /* String walletPassword = "secr3t";
-                            String walletDirectory = "/app/wallet";
-
-                            String walletName = WalletUtils.generateNewWalletFile(walletPassword, new File(walletDirectory));
-                            //System.out.println("wallet location: " + walletDirectory + "/" + walletName);
-
-
-                            Credentials credentials = WalletUtils.loadCredentials(walletPassword, walletDirectory + "/" + walletName);
-
-                            vote = deploy(credentials,web3j);*/
-
-////////////////////////////////////////
-
-
-                      /*     File folder = new File(getFilesDir() +
-                                    File.separator + "Wallet");
-                            boolean success = true;
-                            if (!folder.exists()) {
-                                success = folder.mkdirs();
-                            }
-                            if (success) {
-                                // Do something on success
-                            } else {
-                                // Do something else on failure
-                            }
-
-                            String walletPassword = "secr3t";
-                            String walletDirectory = folder.getPath();
-
-                            String walletName = WalletUtils.generateNewWalletFile(walletPassword, new File(walletDirectory));
-
-                            Log.d("mytest","wallet location: " + walletDirectory + "/" + walletName);
-
-
-                            Credentials credentials4 = WalletUtils.loadCredentials(walletPassword, walletDirectory + "/" + walletName);
-
-
-
-*/
-                            // String fileName = WalletUtils.generateNewWalletFile( "secr3t", new File("/path/to/destination"));
-/*////////////////////////////
-                            try {
-                                String password = "secr3t";
-                                ECKeyPair keyPair = Keys.createEcKeyPair();
-                                WalletFile wallet = Wallet.createStandard(password, keyPair);
-                                Credentials credentials = Credentials.create(keyPair.getPrivateKey().toString(16));
-                                Credentials cred1 = Credentials.create(PRIVATE_KEY);
-                                vote = deploy(cred1,web3j);
-                                ArrayList<String> list2 = new ArrayList<>();
-                                list2.add(credentials.getAddress());
-                                Log.d("mytest","List2: " + list2);
-                                Log.d("mytest","TotalVoters: " +  vote.getTotalVoters().send().toString());
-                                vote.giveRightToVote(list2);
-                                Log.d("mytest","TotalVoters: " +  vote.getTotalVoters().send().toString());
-                                Log.d("mytest","Priate key: " + keyPair.getPrivateKey().toString(16));
-                                Log.d("mytest","Account: " + wallet.getAddress());
-                                List<String> acclist2 =  web3j.ethAccounts().send().getAccounts();
-                                Log.d("mytest", "acc "+acclist2);
-                            } catch(Exception e) {
-                                e.printStackTrace();
-                            }
-*/
-///////////////////////////////////
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                thread.start();
-            }
-        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
