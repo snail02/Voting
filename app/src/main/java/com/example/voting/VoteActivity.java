@@ -260,6 +260,7 @@ public class VoteActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Toast.makeText(VoteActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
                 }
             }
         });

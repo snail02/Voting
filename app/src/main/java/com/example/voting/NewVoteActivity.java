@@ -16,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.voting.contract.Vote;
@@ -169,6 +170,7 @@ public class NewVoteActivity extends AppCompatActivity {
 
                         } catch (Exception e) {
                             Log.d("mytest", e.getMessage());
+                            Toast.makeText(NewVoteActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
