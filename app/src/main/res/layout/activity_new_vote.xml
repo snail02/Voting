@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:hint="Выберите пользователей"
             android:textColor="@color/colorPrimary"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             app:backgroundTint="@color/colorPrimary"

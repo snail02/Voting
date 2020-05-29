@@ -172,6 +172,16 @@ public class RegistrationActivity extends AppCompatActivity {
             return "Пароли на совпадают";
         }
 
+        if(TextUtils.isEmpty(publicKey.getText().toString())){
+
+            return "Введите PublicKey";
+        }
+
+        if(TextUtils.isEmpty(privateKey.getText().toString())){
+
+            return "Введите PrivateKey";
+        }
+
         return "successful";
 
     }
