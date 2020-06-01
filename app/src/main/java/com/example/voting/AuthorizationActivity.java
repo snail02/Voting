@@ -25,6 +25,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.kenai.jffi.Main;
 
 import org.web3j.crypto.Credentials;
@@ -87,6 +88,7 @@ public class AuthorizationActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
+                        refreshToken();
                         Intent myIntent = new Intent(AuthorizationActivity.this,  MainActivity.class);
                         AuthorizationActivity.this.startActivity(myIntent);
                     }
@@ -99,6 +101,22 @@ public class AuthorizationActivity extends AppCompatActivity {
                 Toast.makeText(AuthorizationActivity.this, "Вы ввели неправильный email/пароль", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void refreshToken() {
+
+        users.child(auth.getCurrentUser().getUid()).child("fcmtoken").setValue(FirebaseInstanceId.getInstance().getToken());
+
+  /*      Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (isLastVoters) {
+                    database = FirebaseDatabase.getInstance().getReference().child("SmartContract");
+                    database.child(idCard).child("statusActive").setValue(false);
+                }
+            }
+        });
+        thread.start();*/
     }
 
     public String checkData(){

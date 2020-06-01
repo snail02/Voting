@@ -28,7 +28,7 @@ public class VoteApplication extends Application {
     FirebaseAuth auth;
     DatabaseReference users;
     //String connectUrl = "HTTP://192.168.0.112:7545";
-    String connectUrl = "HTTP://136.169.128.205:7545";
+    String connectUrl = "HTTP://77.79.149.186:7545";
     String PRIVATE_KEY;
     User user = new User();
     UserInfoListener listener;

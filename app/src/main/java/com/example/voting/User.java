@@ -1,14 +1,14 @@
 package com.example.voting;
 
 public class User {
-    private String fam, name, pat, email, phone, pass, privateKey, publicKey;
+    private String fam, name, pat, email, phone, pass, privateKey, publicKey, FCMtoken;
     private boolean secretary;
 
     public User() {
         secretary=false;
     }
 
-    public  User(String fam, String name, String pat, String email, String phone, String pass, String privateKey, String publicKey) {
+    public  User(String fam, String name, String pat, String email, String phone, String pass, String privateKey, String publicKey, String FCMtoken) {
         this.fam = fam;
         this.name = name;
         this.pat = pat;
@@ -17,6 +17,7 @@ public class User {
         this.pass = pass;
         this.privateKey = privateKey;
         this.publicKey = publicKey;
+        this.FCMtoken = FCMtoken;
 
         secretary=false;
 
@@ -26,6 +27,14 @@ public class User {
         String result="";
         result+=getFam() + " " + getName()+ " " +getPat();
         return result;
+    }
+
+    public void setFCMtoken(String FCMtoken) {
+        this.FCMtoken = FCMtoken;
+    }
+
+    public String getFCMtoken() {
+        return FCMtoken;
     }
 
     public String getName() {

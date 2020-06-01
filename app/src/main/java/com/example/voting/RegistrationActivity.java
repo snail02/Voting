@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.santalu.maskedittext.MaskEditText;
 
 import java.security.PublicKey;
@@ -111,6 +112,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 user.setPass(pass.getText().toString());
                 user.setPrivateKey(privateKey.getText().toString());
                 user.setPublicKey(publicKey.getText().toString());
+                user.setFCMtoken(FirebaseInstanceId.getInstance().getToken());
 
                 users.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .setValue(user)

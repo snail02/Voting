@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 
 import com.example.voting.contract.Vote;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.functions.FirebaseFunctions;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.ECKeyPair;
@@ -97,6 +98,10 @@ public class ActiveVoteFragment extends Fragment implements UserInfoListener{
         });
         VoteApplication.getInstance().setListener(this);
         VoteApplication.getInstance().getUserFromFB();
+
+
+
+
     }
 
     public void createNewVote() {

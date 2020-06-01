@@ -25,6 +25,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -32,7 +34,10 @@ import org.web3j.tx.gas.ContractGasProvider;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jrizani.jrspinner.JRSpinner;
 
@@ -43,6 +48,8 @@ public class NewVoteActivity extends AppCompatActivity {
     ArrayList<String> listUserAddress = new ArrayList<>(); // список public key пользователей (кроме текущего аккаунту)
     ArrayList<String> listSelectedAddress = new ArrayList<>(); // адреса выбранные пользователей
     ArrayList<String> listSelectedFullName = new ArrayList<>(); // ФИО выбранных пользователей
+    ArrayList<String> listUserUID = new ArrayList<>(); // uid пользователей
+    ArrayList<String> listSelectedUserUID = new ArrayList<>(); // uid выбранных пользователей
 
 
     TextView nameVote;
@@ -125,6 +132,8 @@ public class NewVoteActivity extends AppCompatActivity {
 
         getAllUsers(); //получение списка пользователей
 
+        addUserInfoInSpinner();
+
         mJRSpinner.setOnSelectMultipleListener(new JRSpinner.OnSelectMultipleListener() {
             @Override
             public void onMultipleSelected(List<Integer> selectedPosition) {
@@ -133,6 +142,7 @@ public class NewVoteActivity extends AppCompatActivity {
                 listSelectedAddress = selectedUsers(listUserAddress, selectedPosition);
                 //Log.d("mytest", "selectedUsersAddress " + listSelectedAddress);
                 listSelectedFullName = selectedUsers(listUserInfo, selectedPosition);
+                listSelectedUserUID = selectedUsers(listUserUID, selectedPosition);
             }
         });
 
@@ -140,7 +150,7 @@ public class NewVoteActivity extends AppCompatActivity {
         createVote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -152,7 +162,7 @@ public class NewVoteActivity extends AppCompatActivity {
 
                         try {
                             vote = deploy(credentials, web3j, name, desc, variant);
-                            if(!listSelectedAddress.isEmpty()) {
+                            if (!listSelectedAddress.isEmpty()) {
                                 vote.giveRightToVote(listSelectedAddress).send();
                             }
 
@@ -168,9 +178,11 @@ public class NewVoteActivity extends AppCompatActivity {
                             DatabaseReference myRef = VoteApplication.getInstance().myRef;
                             myRef.push().setValue(contract);
 
+                            sendNotification("Новое голосование", "Вам дали доступ к новому голосованию"); // отправка уведомления пользователям о доступности голосовнаия
+
                         } catch (Exception e) {
                             Log.d("mytest", e.getMessage());
-                            Toast.makeText(NewVoteActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(NewVoteActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -182,18 +194,17 @@ public class NewVoteActivity extends AppCompatActivity {
         });
 
         allUsersSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    if(!listUserAddress.isEmpty()){
-                        listSelectedAddress=listUserAddress;
+                addUserInfoInSpinner();/////////////////////////////////////////////////////////надо придумать более элегантный способ решения (с лоадером и ожиданием завершения потока с получением данных пользователлей)
+                if(isChecked){
+                    if (!listUserAddress.isEmpty()) {
+                        listSelectedAddress = listUserAddress;
                     }
                     mJRSpinner.setVisibility(View.GONE);
-                } else {
-                    if (!listUserInfo.isEmpty()) {
-                        String[] arrayString = listUserInfo.toArray(new String[0]);
-                        mJRSpinner.setItems(arrayString);
-                        mJRSpinner.setVisibility(View.VISIBLE);
-                    }
+                }
+                else{
+                    mJRSpinner.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -220,11 +231,13 @@ public class NewVoteActivity extends AppCompatActivity {
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                             User user = dataSnapshot.getValue(User.class);
-                            if(!VoteApplication.getInstance().auth.getCurrentUser().getUid().equals(dataSnapshot.getKey())) {
+                            if (!VoteApplication.getInstance().auth.getCurrentUser().getUid().equals(dataSnapshot.getKey())) {
                                 listUser.add(user);
                                 listUserInfo.add(user.getInfo());
                                 listUserAddress.add(user.getPublicKey());
+                                listUserUID.add(dataSnapshot.getKey());
                             }
+
                         }
 
                         @Override
@@ -254,4 +267,32 @@ public class NewVoteActivity extends AppCompatActivity {
         });
         thread.start();
     }
+
+    public void sendNotification(String title, String body) {
+        ArrayList<String> titleNotif = new ArrayList<>();
+        titleNotif.add(title);
+        ArrayList<String> bodyNotif = new ArrayList<>();
+        bodyNotif.add(body);
+        Map<String, List<String>> params = new HashMap<>();
+        params.put("uid", listSelectedUserUID);
+        params.put("title", titleNotif);
+        params.put("body", bodyNotif);
+        FirebaseFunctions.getInstance() // Optional region: .getInstance("europe-west1")
+                .getHttpsCallable("sendNotification")
+                .call(params);
+
+        Log.d("mytest", "Notifications sent");
+    }
+
+
+    public void addUserInfoInSpinner() {
+
+
+        if (!listUserInfo.isEmpty()) {
+            String[] arrayString = listUserInfo.toArray(new String[0]);
+            mJRSpinner.setItems(arrayString);
+        }
+    }
+
+
 }
