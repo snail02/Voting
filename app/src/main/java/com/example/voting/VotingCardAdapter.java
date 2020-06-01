@@ -120,4 +120,17 @@ public class VotingCardAdapter extends RecyclerView.Adapter<VotingCardAdapter.Vo
     public void addCards(List<VotingCard> list){
         card.addAll(0, list);
     }
+
+    public int searchVotingCard(VotingCard dCard){
+        for(int i=0;i<card.size(); i++){
+            if(card.get(i).getAddress()==dCard.getAddress()){
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public void delCard(VotingCard dCard){
+        card.remove(searchVotingCard(dCard));
+    }
 }

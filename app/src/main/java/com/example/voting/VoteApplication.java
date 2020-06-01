@@ -84,6 +84,8 @@ public class VoteApplication extends Application {
         myRef = database.getReference("SmartContract");
         getUserFromFB();
 
+
+
     }
     public void setListener(UserInfoListener userInfoListener){
         listener=userInfoListener;

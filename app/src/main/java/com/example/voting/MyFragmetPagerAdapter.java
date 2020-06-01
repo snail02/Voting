@@ -51,6 +51,10 @@ public class MyFragmetPagerAdapter extends FragmentPagerAdapter {
         activeVoteFragment.addVotes(votes);
     }
 
+    public void activeVotesRemove(VotingCard voteCard){
+        activeVoteFragment.deleteVotes(voteCard);
+    }
+
     public void historyVotes(List<VotingCard> votes){
         historyVoteFragment.addVotes(votes);
     }

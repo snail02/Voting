@@ -49,6 +49,10 @@ public class VotingCard implements Serializable {
         return id;
     }
 
+    public void setStatusActive(boolean statusActive) {
+        this.statusActive = statusActive;
+    }
+
     public String getStatusActive(){
         if(statusActive)
             return "Голосование открыто;";

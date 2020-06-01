@@ -18,7 +18,9 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.web3j.protocol.Web3j;
@@ -29,6 +31,7 @@ import java.security.Security;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
 
     ViewPager viewPager;
     TabLayout tabLayout;
@@ -82,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void signOut(){
+        VoteApplication.getInstance().users.child(VoteApplication.getInstance().auth.getCurrentUser().getUid()).child("fcmtoken").setValue("");
+
         FirebaseAuth.getInstance().signOut();
         finish();
         startActivity(new Intent(this, StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK ));
@@ -140,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else{
                     listPassive.add(0, vc);
+                    pagerAdapter.activeVotesRemove(vc);
                     pagerAdapter.historyVotes(listPassive);
                 }
             }

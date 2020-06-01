@@ -10,7 +10,7 @@
         android:id="@+id/newVoteActivityContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:context=".VoteActivity">
 
     <LinearLayout
@@ -70,6 +70,7 @@
             android:layout_marginRight="5dp"
             android:text="Дать доступ всем пользователям" />
 
+
         <jrizani.jrspinner.JRSpinner
             android:id="@+id/mySpinner"
             android:layout_width="match_parent"
@@ -108,7 +109,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="50dp"
         android:layout_height="50dp"/>
 

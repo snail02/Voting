@@ -119,6 +119,13 @@ public class ActiveVoteFragment extends Fragment implements UserInfoListener{
         adapterCard.notifyDataSetChanged();
     }
 
+    public void deleteVotes(VotingCard voteCard){
+        if(adapterCard!=null) {
+            adapterCard.delCard(voteCard);
+            adapterCard.notifyDataSetChanged();
+        }
+    }
+
     public void updateAdapterCard(List<VotingCard> votes){
         adapterCard.addCards(votes);
         adapterCard.notifyDataSetChanged();

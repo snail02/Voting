@@ -25,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -132,7 +133,7 @@ public class NewVoteActivity extends AppCompatActivity {
 
         getAllUsers(); //получение списка пользователей
 
-        addUserInfoInSpinner();
+
 
         mJRSpinner.setOnSelectMultipleListener(new JRSpinner.OnSelectMultipleListener() {
             @Override
@@ -178,7 +179,7 @@ public class NewVoteActivity extends AppCompatActivity {
                             DatabaseReference myRef = VoteApplication.getInstance().myRef;
                             myRef.push().setValue(contract);
 
-                            sendNotification("Новое голосование", "Вам дали доступ к новому голосованию"); // отправка уведомления пользователям о доступности голосовнаия
+                            sendNotification("Новое голосование", name); // отправка уведомления пользователям о доступности голосовнаия
 
                         } catch (Exception e) {
                             Log.d("mytest", e.getMessage());
@@ -200,6 +201,7 @@ public class NewVoteActivity extends AppCompatActivity {
                 if(isChecked){
                     if (!listUserAddress.isEmpty()) {
                         listSelectedAddress = listUserAddress;
+                        listSelectedUserUID=listUserUID;
                     }
                     mJRSpinner.setVisibility(View.GONE);
                 }
@@ -226,6 +228,7 @@ public class NewVoteActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
+
                     myQuery.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -236,6 +239,8 @@ public class NewVoteActivity extends AppCompatActivity {
                                 listUserInfo.add(user.getInfo());
                                 listUserAddress.add(user.getPublicKey());
                                 listUserUID.add(dataSnapshot.getKey());
+
+
                             }
 
                         }
@@ -264,8 +269,32 @@ public class NewVoteActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
         });
         thread.start();
+
+        Thread thread2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressbar.setVisibility(View.GONE);
+                            constraintLayout.setVisibility(View.VISIBLE);
+                        }
+                    });
+                    addUserInfoInSpinner();
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        thread2.start();
+
     }
 
     public void sendNotification(String title, String body) {
