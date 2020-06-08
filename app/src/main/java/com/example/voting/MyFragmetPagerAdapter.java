@@ -43,7 +43,7 @@ public class MyFragmetPagerAdapter extends FragmentPagerAdapter {
             return "Активные";
         }
         else{
-            return "Прошедшие";
+            return "Завершенные";
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.voting;
 
 import android.app.Application;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Credentials;
 import android.util.Log;
@@ -104,6 +105,7 @@ public class VoteApplication extends Application {
             }
         } catch (Exception e) {
             Log.d("mytest","Connect error: " + e.getMessage());
+
         }
         return web3j;
     }

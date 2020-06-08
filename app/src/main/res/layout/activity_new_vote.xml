@@ -33,14 +33,23 @@
             android:textColor="@color/black"
             android:text="Введите тему голосования:" />
 
-        <EditText
-            android:id="@+id/edit_name_vote"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
             android:hint="Тема"
-            />
+            app:counterEnabled="true"
+            app:counterMaxLength="20">
+
+            <EditText
+                android:id="@+id/edit_name_vote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/textView3"
@@ -50,21 +59,31 @@
             android:textColor="@color/black"
             android:text="Введите описание голосования:" />
 
-        <EditText
-            android:id="@+id/edit_desc_vote"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textFieldDesc"
             android:layout_width="match_parent"
-            android:layout_height="203dp"
-            android:ems="10"
-            android:gravity="start|top"
-            android:inputType="textMultiLine"
-            android:lines="5"
+            android:layout_height="wrap_content"
             android:hint="Описание"
-            />
+            app:counterEnabled="true"
+            app:counterMaxLength="20">
+
+            <EditText
+                android:id="@+id/edit_desc_vote"
+                android:layout_width="match_parent"
+                android:layout_height="203dp"
+                android:gravity="start|top"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:lines="5"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Switch
             android:id="@+id/switchAllUsers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:checked="false"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"

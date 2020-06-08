@@ -134,7 +134,6 @@ public class NewVoteActivity extends AppCompatActivity {
         getAllUsers(); //получение списка пользователей
 
 
-
         mJRSpinner.setOnSelectMultipleListener(new JRSpinner.OnSelectMultipleListener() {
             @Override
             public void onMultipleSelected(List<Integer> selectedPosition) {

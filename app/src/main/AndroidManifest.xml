@@ -14,8 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/MyAppTheme"
         android:usesCleartextTraffic="true">
-
-
+        <activity android:name=".NoConnect"></activity>
         <activity android:name=".AuthorizationActivity" />
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".MainActivity" />

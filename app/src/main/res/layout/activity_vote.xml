@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button_style"
-            android:text="Воздержался" />
+            android:text="Воздержаться" />
 
         </LinearLayout>
 
@@ -98,7 +98,7 @@
             android:id="@+id/message_for_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Дождитесь окончания голосования, чтобы увидеть результат"
+            android:text="Дождитесь завершения голосования, чтобы ознакомиться с результатами"
             android:textSize="24sp"
             android:visibility="gone"/>
 
