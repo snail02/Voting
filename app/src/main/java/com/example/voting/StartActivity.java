@@ -1,6 +1,5 @@
 package com.example.voting;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -10,10 +9,6 @@ import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -36,7 +31,7 @@ public class StartActivity extends AppCompatActivity {
         buttonAuthorization = findViewById(R.id.button_authorization);
 
         if(VoteApplication.getInstance().auth.getCurrentUser()!=null) {
-            Intent myIntent = new Intent(StartActivity.this, MainActivity.class);
+            Intent myIntent = new Intent(StartActivity.this, BaseActivity.class);
             StartActivity.this.startActivity(myIntent);
         }
         else{

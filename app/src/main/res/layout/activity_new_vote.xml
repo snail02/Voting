@@ -93,7 +93,7 @@
             android:text="Дать доступ всем пользователям" />
 
 
-        <jrizani.jrspinner.JRSpinner
+        <com.example.voting.jrspinner.JRSpinner
             android:id="@+id/mySpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -14,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/MyAppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".NoConnect"></activity>
+        <activity android:name=".BaseActivity"></activity>
+        <activity android:name=".HistoryAction" />
+        <activity android:name=".Profile" />
+        <activity android:name=".NoConnect" />
         <activity android:name=".AuthorizationActivity" />
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".MainActivity" />

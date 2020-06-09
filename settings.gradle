@@ -1,2 +1,4 @@
-include ':app'
+include ':app', ':jrspinner', ':example'
 rootProject.name='Voting'
+project(':jrspinner').projectDir = new File('app/src/main/java/com/example/voting/JRSpinner/jrspinner')
+project(':example').projectDir = new File('app/src/main/java/com/example/voting/JRSpinner/example')

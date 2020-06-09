@@ -1,0 +1,213 @@
+package com.example.voting;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Toast;
+
+import com.example.voting.contract.Vote;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.Web3j;
+
+import java.security.Provider;
+import java.security.Security;
+import java.util.ArrayList;
+
+public class BaseActivity extends AppCompatActivity {
+
+    ViewPager viewPager;
+    TabLayout tabLayout;
+    MainFragmentAdapter pagerAdapter;
+
+    Web3j web3j;
+
+    Credentials credentials;
+    Vote vote;
+
+
+    @Override
+    public void onBackPressed() {
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.logout:
+                Toast.makeText(BaseActivity.this, "Вы вышли из аккаунта", Toast.LENGTH_SHORT).show();
+                signOut();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void signOut() {
+        VoteApplication.getInstance().users.child(VoteApplication.getInstance().auth.getCurrentUser().getUid()).child("fcmtoken").setValue("");
+
+        FirebaseAuth.getInstance().signOut();
+        finish();
+        startActivity(new Intent(this, StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+
+    }
+
+    private void setupBouncyCastle() {
+        final Provider provider = Security.getProvider(BouncyCastleProvider.PROVIDER_NAME);
+        if (provider == null) {
+            // Web3j will set up the provider lazily when it's first used.
+            return;
+        }
+        if (provider.getClass().equals(BouncyCastleProvider.class)) {
+            // BC with same package name, shouldn't happen in real life.
+            return;
+        }
+        // Android registers its own BC provider. As it might be outdated and might not include
+        // all needed ciphers, we substitute it with a known BC bundled in the app.
+        // Android's BC has its package rewritten to "com.android.org.bouncycastle" and because
+        // of that it's possible to have another BC implementation loaded in VM.
+        Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
+        Security.insertProviderAt(new BouncyCastleProvider(), 1);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_base);
+        setupBouncyCastle();
+        viewPager = findViewById(R.id.viewPager);
+        tabLayout = findViewById(R.id.tabLayout);
+        pagerAdapter = new MainFragmentAdapter(getSupportFragmentManager());
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Активные голосования");
+
+
+
+        viewPager.setAdapter(pagerAdapter);
+
+        web3j = VoteApplication.getInstance().getWeb3j();
+
+        bottomNavigationView.setSelectedItemId(R.id.action_votes);
+        viewPager.setCurrentItem(1);
+
+        viewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+
+        //credentials = Credentials.create(VoteApplication.getInstance().PRIVATE_KEY);
+
+        DatabaseReference myRef = VoteApplication.getInstance().myRef;
+        Query myQuery = myRef;
+
+        myQuery.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                SmartContract contract = dataSnapshot.getValue(SmartContract.class);
+                VotingCard vc = new VotingCard(contract.getName(), contract.getDescription(), contract.getAddress(), contract.isStatusActive(), dataSnapshot.getKey());
+                ArrayList<VotingCard> listActive = new ArrayList<>();
+                ArrayList<VotingCard> listPassive = new ArrayList<>();
+                if (vc.isStatusActive()) {
+                    listActive.add(0, vc);
+
+                    pagerAdapter.activeVotes(listActive);
+
+
+                } else {
+                    listPassive.add(0, vc);
+                    pagerAdapter.historyVotes(listPassive);
+
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                SmartContract contract = dataSnapshot.getValue(SmartContract.class);
+                VotingCard vc = new VotingCard(contract.getName(), contract.getDescription(), contract.getAddress(), contract.isStatusActive(), dataSnapshot.getKey());
+                ArrayList<VotingCard> listActive = new ArrayList<>();
+                ArrayList<VotingCard> listPassive = new ArrayList<>();
+                if (vc.isStatusActive()) {
+                    listActive.add(0, vc);
+                    pagerAdapter.activeVotes(listActive);
+                } else {
+                    listPassive.add(0, vc);
+                    pagerAdapter.activeVotesRemove(vc);
+                    pagerAdapter.historyVotes(listPassive);
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_history:
+                        viewPager.setCurrentItem(0);
+                        getSupportActionBar().setTitle("История действий");
+                        break;
+                    case R.id.action_votes:
+                        viewPager.setCurrentItem(1);
+                        getSupportActionBar().setTitle("Активные голосования");
+                        break;
+                    case R.id.action_votes_closed:
+                        viewPager.setCurrentItem(2);
+                        getSupportActionBar().setTitle("Завершенные голосования");
+                        break;
+                    case R.id.action_profile:
+                        viewPager.setCurrentItem(3);
+                        getSupportActionBar().setTitle("Профиль");
+                        break;
+                }
+                return true;
+            }
+        });
+
+    }
+}

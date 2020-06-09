@@ -20,14 +20,13 @@ import android.widget.Toast;
 
 
 import com.example.voting.contract.Vote;
+import com.example.voting.jrspinner.JRSpinner;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.functions.FirebaseFunctions;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -35,12 +34,10 @@ import org.web3j.tx.gas.ContractGasProvider;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jrizani.jrspinner.JRSpinner;
 
 public class NewVoteActivity extends AppCompatActivity {
 
@@ -195,7 +192,7 @@ public class NewVoteActivity extends AppCompatActivity {
                     thread.start();
                     Toast.makeText(NewVoteActivity.this, "Голосование создано", Toast.LENGTH_SHORT).show();
 
-                    Intent myIntent = new Intent(NewVoteActivity.this, MainActivity.class);
+                    Intent myIntent = new Intent(NewVoteActivity.this, BaseActivity.class);
                     NewVoteActivity.this.startActivity(myIntent);
                 }
                 else {

@@ -179,7 +179,7 @@ public class VoteActivity extends AppCompatActivity {
     }
 
     public  void returnOnMainActivity(){
-        Intent myIntent = new Intent(VoteActivity.this, MainActivity.class);
+        Intent myIntent = new Intent(VoteActivity.this, BaseActivity.class);
         VoteActivity.this.startActivity(myIntent);
     }
 
