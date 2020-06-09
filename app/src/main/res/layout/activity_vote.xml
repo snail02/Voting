@@ -42,7 +42,7 @@
         <EditText
             android:id="@+id/desc_vote_text"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="200dp"
             android:ems="10"
             android:gravity="start|top"
             android:focusable="false"
@@ -102,6 +102,38 @@
             android:textSize="24sp"
             android:visibility="gone"/>
 
+        <TextView
+            android:id="@+id/totalNumberOfUsers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="totalNumberOfUsers"
+            android:textSize="20sp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/totalNumberOfVoters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="totalNumberOfVoters"
+            android:textSize="20sp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/numberOfVoters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="numberOfVoters"
+            android:textSize="20sp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/yourVote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="yourVote"
+            android:textSize="20sp"
+            android:visibility="gone"/>
+
         <ProgressBar
             android:id="@+id/progressBarVote"
             app:layout_constraintTop_toTopOf="parent"
@@ -118,6 +150,10 @@
             android:layout_width="match_parent"
             android:visibility="gone"
             android:layout_height="500dp"/>
+
+
+
+
 
 
 

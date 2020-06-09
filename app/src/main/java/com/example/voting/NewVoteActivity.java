@@ -52,6 +52,7 @@ public class NewVoteActivity extends AppCompatActivity {
     ArrayList<String> listUserUID = new ArrayList<>(); // uid пользователей
     ArrayList<String> listSelectedUserUID = new ArrayList<>(); // uid выбранных пользователей
 
+    double percentageOfAvailableMembers = 60;
 
     TextView nameVote;
     TextView descVote;
@@ -116,9 +117,9 @@ public class NewVoteActivity extends AppCompatActivity {
         progressbar = findViewById(R.id.progressBarNewVote);
         constraintLayout = findViewById(R.id.newVoteActivityContent);
 
-        variant.add("Da");
-        variant.add("Net");
-        variant.add("Vozderjalsya");
+        variant.add("За");
+        variant.add("Против");
+        variant.add("Воздержаться");
 
         credentials = Credentials.create(VoteApplication.getInstance().PRIVATE_KEY);
 
@@ -154,57 +155,67 @@ public class NewVoteActivity extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String name = nameVote.getText().toString();
-                        String desc = descVote.getText().toString();
 
-                        try {
-                            vote = deploy(credentials, web3j, name, desc, variant);
-                            if (!listSelectedAddress.isEmpty()) {
-                                vote.giveRightToVote(listSelectedAddress).send();
+                String result = checkVerificationData(percentageOfAvailableMembers);
+
+                if (result.equals("successfully")) {
+
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String name = nameVote.getText().toString();
+                            String desc = descVote.getText().toString();
+
+                            try {
+                                vote = deploy(credentials, web3j, name, desc, variant);
+                                if (!listSelectedAddress.isEmpty()) {
+                                    vote.giveRightToVote(listSelectedAddress).send();
+                                }
+
+                                Log.d("mytest", "---CREATE NEW VOTE---");
+                                Log.d("mytest", "User with right " + listSelectedFullName);
+                                Log.d("mytest", "vote address " + vote.getContractAddress());
+                                Log.d("mytest", "totalVoters " + vote.getTotalVoters().send());
+                                Log.d("mytest", "currentVoters " + vote.getCurrentVoters().send());
+                                Log.d("mytest", "getMyVote() " + vote.getMyVote().send());
+
+                                SmartContract contract = new SmartContract(vote.getContractAddress(), name, desc);
+
+                                DatabaseReference myRef = VoteApplication.getInstance().myRef;
+                                myRef.push().setValue(contract);
+
+                                sendNotification("Новое голосование", name); // отправка уведомления пользователям о доступности голосовнаия
+
+                            } catch (Exception e) {
+                                Log.d("mytest", e.getMessage());
+                                //Toast.makeText(NewVoteActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
                             }
-
-                            Log.d("mytest", "---CREATE NEW VOTE---");
-                            Log.d("mytest", "User with right " + listSelectedFullName);
-                            Log.d("mytest", "vote address " + vote.getContractAddress());
-                            Log.d("mytest", "totalVoters " + vote.getTotalVoters().send());
-                            Log.d("mytest", "currentVoters " + vote.getCurrentVoters().send());
-                            Log.d("mytest", "getMyVote() " + vote.getMyVote().send());
-
-                            SmartContract contract = new SmartContract(vote.getContractAddress(), name, desc);
-
-                            DatabaseReference myRef = VoteApplication.getInstance().myRef;
-                            myRef.push().setValue(contract);
-
-                            sendNotification("Новое голосование", name); // отправка уведомления пользователям о доступности голосовнаия
-
-                        } catch (Exception e) {
-                            Log.d("mytest", e.getMessage());
-                            //Toast.makeText(NewVoteActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
-                thread.start();
+                    });
+                    thread.start();
+                    Toast.makeText(NewVoteActivity.this, "Голосование создано", Toast.LENGTH_SHORT).show();
 
-                Intent myIntent = new Intent(NewVoteActivity.this, MainActivity.class);
-                NewVoteActivity.this.startActivity(myIntent);
+                    Intent myIntent = new Intent(NewVoteActivity.this, MainActivity.class);
+                    NewVoteActivity.this.startActivity(myIntent);
+                }
+                else {
+                    Toast.makeText(NewVoteActivity.this, result, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         allUsersSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                addUserInfoInSpinner();/////////////////////////////////////////////////////////надо придумать более элегантный способ решения (с лоадером и ожиданием завершения потока с получением данных пользователлей)
-                if(isChecked){
+                addUserInfoInSpinner();
+                if (isChecked) {
                     if (!listUserAddress.isEmpty()) {
+                        listSelectedFullName = listUserInfo;
                         listSelectedAddress = listUserAddress;
-                        listSelectedUserUID=listUserUID;
+                        listSelectedUserUID = listUserUID;
                     }
                     mJRSpinner.setVisibility(View.GONE);
-                }
-                else{
+                } else {
                     mJRSpinner.setVisibility(View.VISIBLE);
                 }
             }
@@ -320,6 +331,31 @@ public class NewVoteActivity extends AppCompatActivity {
             String[] arrayString = listUserInfo.toArray(new String[0]);
             mJRSpinner.setItems(arrayString);
         }
+    }
+
+    public boolean checkFieldEmpty() {
+        if (nameVote.getText().length() != 0 && descVote.getText().length() != 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean checkNumberOfUsers(List<String> list, double percent){
+        if((double)(list.size()+1)/(double) (listUserInfo.size()+1)*100 < percent){
+            return false;
+        }
+        return true;
+    }
+
+    public String checkVerificationData(double p){
+        if(checkFieldEmpty()){
+            return "Заполните поля";
+        }
+        if(!checkNumberOfUsers(listSelectedFullName,p)){
+            return "Недостаточно участников для голосования";
+        }
+        return "successfully";
     }
 
 

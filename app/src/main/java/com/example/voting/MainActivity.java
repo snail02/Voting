@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.voting.contract.Vote;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -23,12 +24,15 @@ import com.google.firebase.database.Query;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.tx.gas.ContractGasProvider;
 
 
 import java.security.Provider;
 import java.security.Security;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
     VotingCardAdapter cardActive;
 
     Web3j web3j;
+
+    Credentials credentials;
+    Vote vote;
+
+    ArrayList<VotingCard> listActiveGlobal = new ArrayList<>();
+    ArrayList<VotingCard> listPassiveGlobal = new ArrayList<>();
 
     private void setupBouncyCastle() {
         final Provider provider = Security.getProvider(BouncyCastleProvider.PROVIDER_NAME);
@@ -84,12 +94,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void signOut(){
+    private void signOut() {
         VoteApplication.getInstance().users.child(VoteApplication.getInstance().auth.getCurrentUser().getUid()).child("fcmtoken").setValue("");
 
         FirebaseAuth.getInstance().signOut();
         finish();
-        startActivity(new Intent(this, StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK ));
+        startActivity(new Intent(this, StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
 
     }
 
@@ -103,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Голосования");
 
-        viewPager=findViewById(R.id.viewPager);
-        tabLayout=findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
+        tabLayout = findViewById(R.id.tabLayout);
         pagerAdapter = new MyFragmetPagerAdapter(getSupportFragmentManager());
 
         viewPager.setAdapter(pagerAdapter);
@@ -112,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         web3j = VoteApplication.getInstance().getWeb3j();
+
+        //credentials = Credentials.create(VoteApplication.getInstance().PRIVATE_KEY);
 
         DatabaseReference myRef = VoteApplication.getInstance().myRef;
         Query myQuery = myRef;
@@ -123,13 +135,17 @@ public class MainActivity extends AppCompatActivity {
                 VotingCard vc = new VotingCard(contract.getName(), contract.getDescription(), contract.getAddress(), contract.isStatusActive(), dataSnapshot.getKey());
                 ArrayList<VotingCard> listActive = new ArrayList<>();
                 ArrayList<VotingCard> listPassive = new ArrayList<>();
-                if(vc.isStatusActive()){
+                if (vc.isStatusActive()) {
                     listActive.add(0, vc);
-                    pagerAdapter.activeVotes(listActive);
-                }
-                else{
-                    listPassive.add(0, vc);
-                    pagerAdapter.historyVotes(listPassive);
+                    //foo(vc);
+                    //listActiveGlobal.add(0, vc);
+                     pagerAdapter.activeVotes(listActive);
+
+
+                } else {
+                     listPassive.add(0, vc);
+                     pagerAdapter.historyVotes(listPassive);
+                    //listPassiveGlobal.add(0, vc);
                 }
             }
 
@@ -139,11 +155,10 @@ public class MainActivity extends AppCompatActivity {
                 VotingCard vc = new VotingCard(contract.getName(), contract.getDescription(), contract.getAddress(), contract.isStatusActive(), dataSnapshot.getKey());
                 ArrayList<VotingCard> listActive = new ArrayList<>();
                 ArrayList<VotingCard> listPassive = new ArrayList<>();
-                if(vc.isStatusActive()){
-                    listActive.add(0,vc);
+                if (vc.isStatusActive()) {
+                    listActive.add(0, vc);
                     pagerAdapter.activeVotes(listActive);
-                }
-                else{
+                } else {
                     listPassive.add(0, vc);
                     pagerAdapter.activeVotesRemove(vc);
                     pagerAdapter.historyVotes(listPassive);
@@ -164,8 +179,28 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-
         });
+
+
+    }
+
+    public void foo(VotingCard card) {
+        ArrayList<VotingCard> listActivetmp = new ArrayList<>();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                credentials = Credentials.create(VoteApplication.getInstance().PRIVATE_KEY);
+                vote = Vote.load(card.getAddress(), web3j, credentials, VoteApplication.getInstance().contractGasProvider);
+                if (!vote.checkRight().sendAsync().equals("Вы не можете голосовать")) {
+                    listActivetmp.add(0,card);
+                    listActiveGlobal.add(0,card);
+                    //pagerAdapter.activeVotes(listActivetmp);
+                }
+
+            }
+        });
+        thread.start();
+
 
     }
 }

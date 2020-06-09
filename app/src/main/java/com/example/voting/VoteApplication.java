@@ -7,6 +7,8 @@ import android.net.Credentials;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.example.voting.contract.Vote;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -33,6 +35,7 @@ public class VoteApplication extends Application {
     String PRIVATE_KEY;
     User user = new User();
     UserInfoListener listener;
+    int totalUsers;
 
     ArrayList<String> variant = new ArrayList<>();
 
@@ -70,6 +73,7 @@ public class VoteApplication extends Application {
         return instance;
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -84,6 +88,7 @@ public class VoteApplication extends Application {
         users = database.getReference("Users");
         myRef = database.getReference("SmartContract");
         getUserFromFB();
+
 
 
 
@@ -107,6 +112,7 @@ public class VoteApplication extends Application {
             Log.d("mytest","Connect error: " + e.getMessage());
 
         }
+
         return web3j;
     }
 
@@ -115,6 +121,22 @@ public class VoteApplication extends Application {
     }
 
     public void getUserFromFB() {
+
+
+        users.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                totalUsers = (int)(dataSnapshot.getChildrenCount());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
         if (auth.getCurrentUser() != null) {
             Thread thread = new Thread(new Runnable() {
                 @Override
