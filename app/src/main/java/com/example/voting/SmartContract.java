@@ -5,20 +5,28 @@ public class SmartContract {
     private String name;
     private String description;
     private boolean statusActive;
+    private int timelife;
 
 
     public SmartContract() {
     }
 
-    SmartContract(String address, String name, String description ){
+    SmartContract(String address, String name, String description, int timelife ){
         this.address=address;
         this.name=name;
         this.description=description;
         this.statusActive=true;
+        this.timelife=timelife;
     }
 
 
+    public int getTimelife() {
+        return timelife;
+    }
 
+    public void setTimelife(int timelife) {
+        this.timelife = timelife;
+    }
 
     public String getAddress() {
         return address;

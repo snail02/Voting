@@ -36,6 +36,14 @@ import com.anychart.enums.LegendLayout;
 import com.anychart.enums.Position;
 import com.anychart.enums.TooltipPositionMode;
 import com.example.voting.contract.Vote;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,6 +79,8 @@ public class VoteActivity extends AppCompatActivity {
     String idCard;
     String status;
     String yourVotestring;
+
+    HorizontalBarChart chart;
 
 
     int totalUsers;
@@ -274,6 +284,7 @@ public class VoteActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
+                    yourVotestring = vote.getMyVote().send();
                     BigInteger total = vote.getTotalVoters().send();
                     totalVoters=total.intValue();
                     BigInteger current = vote.getCurrentVoters().send();
@@ -281,12 +292,13 @@ public class VoteActivity extends AppCompatActivity {
                     Log.d("mytest", "---OPEN VOTE ACTIVITY---");
                     Log.d("mytest", "totalVoters " + total);
                     Log.d("mytest", "currentVoters " + current);
-                    yourVotestring = vote.getMyVote().send();
+
                     Log.d("mytest", "my vote " + yourVotestring);
 
                     if (total.intValue() - current.intValue() == 1) {
                         isLastVoters = true;
                     }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -380,12 +392,16 @@ public class VoteActivity extends AppCompatActivity {
                     //noCount=vote.getCountVoteVariant(BigInteger.valueOf(1)).send().intValue();
                     // vozderjalsya_count=vote.getCountVoteVariant(BigInteger.valueOf(2)).send().intValue();
 
-                    printResultVote();
+                    //printResultVote();
 
 
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+
+                if(!isActive){
+                    printResultVote();
                 }
 
             }
@@ -447,7 +463,7 @@ public class VoteActivity extends AppCompatActivity {
 
 */
 
-
+/*
         Cartesian cartesian = AnyChart.column();
 
         List<DataEntry> data = new ArrayList<>();
@@ -481,10 +497,91 @@ public class VoteActivity extends AppCompatActivity {
         cartesian.yAxis(0).title("Количество голосов");
 
         chartView.setChart(cartesian);
+*/
+
+////////////////////////////////////////////////////////////////
+
+        chart = findViewById(R.id.chart1);
+        // chart.setHighlightEnabled(false);
+
+        chart.setDrawBarShadow(false);
+
+        chart.setDrawValueAboveBar(true);
+
+        chart.getDescription().setEnabled(false);
+
+        // if more than 60 entries are displayed in the chart, no values will be
+        // drawn
+        chart.setMaxVisibleValueCount(60);
+
+        // scaling can now only be done on x- and y-axis separately
+        chart.setPinchZoom(false);
+
+        // draw shadows for each bar that show the maximum value
+        // chart.setDrawBarShadow(true);
+
+        chart.setDrawGridBackground(false);
+
+        XAxis xl = chart.getXAxis();
+        xl.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xl.setDrawAxisLine(true);
+        xl.setDrawGridLines(false);
+        xl.setDrawLabels(false);
+        xl.setGranularity(10f);
+
+        YAxis yl = chart.getAxisLeft();
+        yl.setDrawAxisLine(false);
+        yl.setDrawGridLines(false);
+        yl.setDrawLabels(false);
+        yl.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+      //yl.setInverted(true);
+
+        YAxis yr = chart.getAxisRight();
+        yr.setDrawAxisLine(true);
+        yr.setDrawGridLines(false);
+        yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+//        yr.setInverted(true);
+
+        chart.setFitBars(true);
+        chart.animateY(1500);
 
 
 
+        Legend l = chart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
+        l.setDrawInside(false);
+        l.setYEntrySpace(80f);
+        l.setTextSize(10);
+        l.setFormSize(0f);
+        l.setXEntrySpace(0f);
 
+        //List<BarEntry> values = new ArrayList<>();
+
+        secondList.set(0,6);
+        secondList.set(1,12);
+        secondList.set(2,32);
+        numberVorets=50;
+
+        ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+        for (int i = 0; i < firstList.size(); i++) {
+            List<BarEntry> values = new ArrayList<>();
+            //values.add(new BarEntry(firstList.get(i), secondList.get(i)));
+            values.add(new BarEntry(i,(float)secondList.get(i)/numberVorets*100));
+            BarDataSet set1 = new BarDataSet(values , firstList.get(i));
+            dataSets.add(set1);
+        }
+
+        //BarDataSet set1 = new BarDataSet(values , "");
+
+        //ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+        //dataSets.add(set1);
+
+        BarData data = new BarData(dataSets);
+        data.setValueTextSize(10f);
+
+        chart.setData(data);
 
 
 

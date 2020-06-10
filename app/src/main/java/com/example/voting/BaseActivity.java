@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -118,15 +119,16 @@ public class BaseActivity extends AppCompatActivity {
         web3j = VoteApplication.getInstance().getWeb3j();
 
         bottomNavigationView.setSelectedItemId(R.id.action_votes);
-        viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(1,false);
 
+/*
         viewPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return true;
             }
         });
-
+*/
         //credentials = Credentials.create(VoteApplication.getInstance().PRIVATE_KEY);
 
         DatabaseReference myRef = VoteApplication.getInstance().myRef;
@@ -143,6 +145,7 @@ public class BaseActivity extends AppCompatActivity {
                     listActive.add(0, vc);
 
                     pagerAdapter.activeVotes(listActive);
+                    Log.d("mytest","activeVoteonChildAdded");
 
 
                 } else {
@@ -161,6 +164,7 @@ public class BaseActivity extends AppCompatActivity {
                 if (vc.isStatusActive()) {
                     listActive.add(0, vc);
                     pagerAdapter.activeVotes(listActive);
+                    Log.d("mytest","activeVoteonChildChanged");
                 } else {
                     listPassive.add(0, vc);
                     pagerAdapter.activeVotesRemove(vc);
@@ -184,30 +188,68 @@ public class BaseActivity extends AppCompatActivity {
             }
         });
 
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                switch (position) {
+                    case 0:
+                        bottomNavigationView.setSelectedItemId(R.id.action_history);
+                        getSupportActionBar().setTitle("История действий");
+                        break;
+                    case 1:
+                        bottomNavigationView.setSelectedItemId(R.id.action_votes);
+                        getSupportActionBar().setTitle("Активные голосования");
+                        break;
+                    case 2:
+                        bottomNavigationView.setSelectedItemId(R.id.action_votes_closed);
+                        getSupportActionBar().setTitle("Завершенные голосования");
+                        break;
+                    case 3:
+                        bottomNavigationView.setSelectedItemId(R.id.action_profile);
+                        getSupportActionBar().setTitle("Профиль");
+                        break;
+                }
+                //viewPager.setCurrentItem(position, false);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_history:
-                        viewPager.setCurrentItem(0);
+                        viewPager.setCurrentItem(0, false);
                         getSupportActionBar().setTitle("История действий");
                         break;
                     case R.id.action_votes:
-                        viewPager.setCurrentItem(1);
+                        viewPager.setCurrentItem(1,false);
                         getSupportActionBar().setTitle("Активные голосования");
                         break;
                     case R.id.action_votes_closed:
-                        viewPager.setCurrentItem(2);
+                        viewPager.setCurrentItem(2,false);
                         getSupportActionBar().setTitle("Завершенные голосования");
                         break;
                     case R.id.action_profile:
-                        viewPager.setCurrentItem(3);
+                        viewPager.setCurrentItem(3,false);
                         getSupportActionBar().setTitle("Профиль");
                         break;
                 }
                 return true;
             }
         });
+
+
 
     }
 }

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -55,6 +56,8 @@ public class NewVoteActivity extends AppCompatActivity {
     TextView descVote;
     Button createVote;
     Switch allUsersSwitch;
+
+    NumberPicker picker;
 
     private long mLastClickTime = 0;
 
@@ -108,11 +111,17 @@ public class NewVoteActivity extends AppCompatActivity {
         nameVote = findViewById(R.id.edit_name_vote);
         descVote = findViewById(R.id.edit_desc_vote);
         createVote = findViewById(R.id.button_new_vote);
+        picker=findViewById(R.id.number_picker);
 
         allUsersSwitch = findViewById(R.id.switchAllUsers);
 
         progressbar = findViewById(R.id.progressBarNewVote);
         constraintLayout = findViewById(R.id.newVoteActivityContent);
+
+        String[] data = new String[]{"5", "10", "15", "20","25", "30", "35", "40", "45", "50", "55", "60"};
+        picker.setMinValue(0);
+        picker.setMaxValue(data.length-1);
+        picker.setDisplayedValues(data);
 
         variant.add("За");
         variant.add("Против");
@@ -176,7 +185,7 @@ public class NewVoteActivity extends AppCompatActivity {
                                 Log.d("mytest", "currentVoters " + vote.getCurrentVoters().send());
                                 Log.d("mytest", "getMyVote() " + vote.getMyVote().send());
 
-                                SmartContract contract = new SmartContract(vote.getContractAddress(), name, desc);
+                                SmartContract contract = new SmartContract(vote.getContractAddress(), name, desc, (picker.getValue()+1)*5);
 
                                 DatabaseReference myRef = VoteApplication.getInstance().myRef;
                                 myRef.push().setValue(contract);
