@@ -8,7 +8,6 @@
     tools:context=".VoteActivity">
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -145,16 +144,57 @@
             android:layout_width="50dp"
             android:layout_height="50dp"/>
 
-        <com.anychart.AnyChartView
-            android:id="@+id/chartView"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintForChart"
             android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="500dp"/>
+            android:layout_height="match_parent">
 
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/chart1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginLeft="90dp"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:background="@android:color/white"
+                android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/variant_za"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="120dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/chart1"
+                android:text="За"
+                android:textSize="13sp"
+                android:visibility="gone"/>
 
+            <TextView
+                android:id="@+id/variant_protiv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="105dp"
+                app:layout_constraintTop_toBottomOf="@+id/variant_za"
+                app:layout_constraintRight_toLeftOf="@+id/chart1"
+                android:text="Против"
+                android:textSize="13sp"
+                android:visibility="gone"/>
 
+            <TextView
+                android:id="@+id/variant_vozderj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="105dp"
+                app:layout_constraintTop_toBottomOf="@+id/variant_protiv"
+                app:layout_constraintRight_toLeftOf="@+id/chart1"
+                android:text="Воздержаться"
+                android:textSize="13sp"
+                android:visibility="gone"/>
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </LinearLayout>

@@ -36,6 +36,14 @@ import com.anychart.enums.LegendLayout;
 import com.anychart.enums.Position;
 import com.anychart.enums.TooltipPositionMode;
 import com.example.voting.contract.Vote;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +58,7 @@ import org.web3j.tuples.Tuple;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +73,9 @@ public class VoteActivity extends AppCompatActivity {
     TextView totalNumberOfVoters;
     TextView numberOfVoters;
     TextView yourVote;
+    TextView textVarianZa;
+    TextView textVarianProtiv;
+    TextView textVarianVozderj;
     Button yes;
     Button no;
     Button neutral;
@@ -73,13 +85,16 @@ public class VoteActivity extends AppCompatActivity {
     String yourVotestring;
 
 
+    HorizontalBarChart chart;
+
+
     int totalUsers;
     int totalVoters;
     int numberVorets;
 
     private long mLastClickTime = 0;
 
-    AnyChartView chartView;
+
 
     int yesCount;
     int noCount;
@@ -117,12 +132,14 @@ public class VoteActivity extends AppCompatActivity {
         yes = findViewById(R.id.variant_yes_button);
         no = findViewById(R.id.variant_no_button);
         neutral = findViewById(R.id.variant_neutral_button);
+        textVarianZa = findViewById(R.id.variant_za);
+        textVarianProtiv = findViewById(R.id.variant_protiv);
+        textVarianVozderj = findViewById(R.id.variant_vozderj);
 
         progressbar = findViewById(R.id.progressBarVote);
         constraintLayout = findViewById(R.id.voteActivityContent);
 
-
-        chartView = findViewById(R.id.chartView);
+        chart = findViewById(R.id.chart1);
 
         Bundle arguments = getIntent().getExtras();
         VotingCard card = (VotingCard) (arguments.getSerializable("card"));
@@ -274,6 +291,7 @@ public class VoteActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
+                    yourVotestring = vote.getMyVote().send();
                     BigInteger total = vote.getTotalVoters().send();
                     totalVoters=total.intValue();
                     BigInteger current = vote.getCurrentVoters().send();
@@ -281,12 +299,13 @@ public class VoteActivity extends AppCompatActivity {
                     Log.d("mytest", "---OPEN VOTE ACTIVITY---");
                     Log.d("mytest", "totalVoters " + total);
                     Log.d("mytest", "currentVoters " + current);
-                    yourVotestring = vote.getMyVote().send();
+
                     Log.d("mytest", "my vote " + yourVotestring);
 
                     if (total.intValue() - current.intValue() == 1) {
                         isLastVoters = true;
                     }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -335,7 +354,12 @@ public class VoteActivity extends AppCompatActivity {
             totalNumberOfUsers.setText("Количество голосующих: " + String.valueOf(VoteApplication.getInstance().totalUsers));
             totalNumberOfVoters.setText("Количество участников голосования: " + String.valueOf(totalVoters) );
             numberOfVoters.setText("Проголосовало: " + String.valueOf(numberVorets));
-            yourVote.setText("Вы проголосовали за вариант: " + yourVotestring);
+            if(yourVotestring.equals("You are not voted")){
+                yourVote.setText("Вы не голосовали");
+            }
+            else {
+                yourVote.setText("Вы проголосовали за вариант: " + yourVotestring);
+            }
 
             for (int i = 0; i < VoteApplication.getInstance().variant.size(); i++) {
                 Log.d("mytest", VoteApplication.getInstance().variant.get(i) + " " + countVotesForVariant.get(i));
@@ -349,7 +373,11 @@ public class VoteActivity extends AppCompatActivity {
                         totalNumberOfVoters.setVisibility(View.VISIBLE);
                         numberOfVoters.setVisibility(View.VISIBLE);
                         yourVote.setVisibility(View.VISIBLE);
-                        chartView.setVisibility(View.VISIBLE);
+                        textVarianProtiv.setVisibility(View.VISIBLE);
+                        textVarianZa.setVisibility(View.VISIBLE);
+                        textVarianVozderj.setVisibility(View.VISIBLE);
+
+                        chart.setVisibility(View.VISIBLE);
                         setupPieChart(VoteApplication.getInstance().variant,countVotesForVariant);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -380,12 +408,16 @@ public class VoteActivity extends AppCompatActivity {
                     //noCount=vote.getCountVoteVariant(BigInteger.valueOf(1)).send().intValue();
                     // vozderjalsya_count=vote.getCountVoteVariant(BigInteger.valueOf(2)).send().intValue();
 
-                    printResultVote();
+                    //printResultVote();
 
 
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+
+                if(!isActive){
+                    printResultVote();
                 }
 
             }
@@ -409,85 +441,103 @@ public class VoteActivity extends AppCompatActivity {
     }
 
     public void setupPieChart(List<String> firstList, List<Integer> secondList) {
-   /*     Pie pie = AnyChart.pie();
 
-        List<DataEntry> dataEntries = new ArrayList<>();
 
+
+        // chart.setHighlightEnabled(false);
+
+        chart.setDrawBarShadow(false);
+
+        chart.setDrawValueAboveBar(true);
+
+        chart.getDescription().setEnabled(false);
+
+        // if more than 60 entries are displayed in the chart, no values will be
+        // drawn
+        chart.setMaxVisibleValueCount(60);
+
+        // scaling can now only be done on x- and y-axis separately
+        chart.setPinchZoom(false);
+
+        // draw shadows for each bar that show the maximum value
+        // chart.setDrawBarShadow(true);
+
+        chart.setDrawGridBackground(false);
+
+        XAxis xl = chart.getXAxis();
+        xl.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xl.setDrawAxisLine(true);
+        xl.setDrawGridLines(false);
+        xl.setDrawLabels(false);
+        xl.setGranularity(10f);
+
+        YAxis yl = chart.getAxisLeft();
+        yl.setDrawAxisLine(false);
+        yl.setDrawGridLines(false);
+        yl.setDrawLabels(false);
+        yl.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+      //yl.setInverted(true);
+
+        YAxis yr = chart.getAxisRight();
+        yr.setDrawAxisLine(true);
+        yr.setDrawGridLines(false);
+        yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+//        yr.setInverted(true);
+
+        chart.setFitBars(true);
+        chart.animateY(1500);
+
+
+
+        Legend l = chart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        l.setDrawInside(false);
+        l.setEnabled(false);
+        l.setTextSize(0f);
+        l.setFormSize(0f);
+        //l.setXEntrySpace(0f);
+
+        //List<BarEntry> values = new ArrayList<>();
+
+       // secondList.set(0,6);
+       // secondList.set(1,12);
+       // secondList.set(2,32);
+        //numberVorets=50;
+
+        ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         for (int i = 0; i < firstList.size(); i++) {
-            dataEntries.add(new ValueDataEntry(firstList.get(i), secondList.get(i)));
+            List<BarEntry> values = new ArrayList<>();
+            //values.add(new BarEntry(firstList.get(i), secondList.get(i)));
+            values.add(new BarEntry(i,(float)secondList.get(i)/numberVorets*100));
+            BarDataSet set1 = new BarDataSet(values , firstList.get(i));
+            dataSets.add(set1);
         }
 
-        pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
-            @Override
-            public void onClick(Event event) {
-                //Toast.makeText(chartView.getContext(), event.getData().get("x") + ":" + event.getData().get("value"), Toast.LENGTH_SHORT).show();
-            }
-        });
+        //BarDataSet set1 = new BarDataSet(values , "");
 
-        pie.title("Распределение голосов");
+        //ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+        //dataSets.add(set1);
 
-        pie.labels().position("outside");
+        BarData data = new BarData(dataSets);
+        data.setValueTextSize(10f);
 
-        pie.legend().title().enabled(true);
-        pie.legend().title()
-                .text("Варианты ответов")
-                .padding(0d, 0d, 10d, 0d);
-
-
-
-
-        pie.legend()
-                .position("center-bottom")
-                .itemsLayout(LegendLayout.HORIZONTAL)
-                .align(Align.CENTER);
-
-        pie.data(dataEntries);
-
-        chartView.setChart(pie);
-
-*/
-
-
-        Cartesian cartesian = AnyChart.column();
-
-        List<DataEntry> data = new ArrayList<>();
-
-        for (int i = 0; i < firstList.size(); i++) {
-            data.add(new ValueDataEntry(firstList.get(i), secondList.get(i)));
-        }
-
-
-        Column column = cartesian.column(data);
-
-        column.tooltip()
-                .titleFormat("{%X}")
-                .position(Position.CENTER_BOTTOM)
-                .anchor(Anchor.CENTER_BOTTOM)
-                .offsetX(0d)
-                .offsetY(5d)
-                .format("{%Value}{groupsSeparator: }");
-
-        cartesian.animation(true);
-        cartesian.title("Распределение голосов");
-
-        cartesian.yScale().minimum(0d);
-
-        cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
-
-        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
-        cartesian.interactivity().hoverMode(HoverMode.BY_X);
-
-        cartesian.xAxis(0).title("Варианты ответов");
-        cartesian.yAxis(0).title("Количество голосов");
-
-        chartView.setChart(cartesian);
-
-
-
-
+        chart.setData(data);
 
 
 
 
     }
+
+  /*  public ArrayList<Integer> sortList(ArrayList<Integer> sortList){
+        ArrayList<Integer> list = new ArrayList<>();
+        list=sortList;
+        Collections.reverse(sortList);
+        for(int i=0;i<list.size();i++){
+            if()
+        }
+
+        return list;
+    }
+    */
 }

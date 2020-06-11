@@ -107,6 +107,11 @@
             app:jrs_multiple="true"
             app:jrs_icon_tint="@color/colorPrimary"/>
 
+        <NumberPicker
+            android:id="@+id/number_picker"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+
         <Button
             android:id="@+id/button_new_vote"
             android:layout_width="match_parent"

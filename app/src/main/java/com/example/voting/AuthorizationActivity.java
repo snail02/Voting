@@ -89,7 +89,7 @@ public class AuthorizationActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         refreshToken();
-                        Intent myIntent = new Intent(AuthorizationActivity.this,  MainActivity.class);
+                        Intent myIntent = new Intent(AuthorizationActivity.this,  BaseActivity.class);
                         AuthorizationActivity.this.startActivity(myIntent);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
