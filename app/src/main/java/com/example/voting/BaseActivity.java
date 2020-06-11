@@ -145,7 +145,6 @@ public class BaseActivity extends AppCompatActivity {
                     listActive.add(0, vc);
 
                     pagerAdapter.activeVotes(listActive);
-                    Log.d("mytest","activeVoteonChildAdded");
 
 
                 } else {
@@ -164,7 +163,6 @@ public class BaseActivity extends AppCompatActivity {
                 if (vc.isStatusActive()) {
                     listActive.add(0, vc);
                     pagerAdapter.activeVotes(listActive);
-                    Log.d("mytest","activeVoteonChildChanged");
                 } else {
                     listPassive.add(0, vc);
                     pagerAdapter.activeVotesRemove(vc);

@@ -58,6 +58,7 @@ import org.web3j.tuples.Tuple;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +73,9 @@ public class VoteActivity extends AppCompatActivity {
     TextView totalNumberOfVoters;
     TextView numberOfVoters;
     TextView yourVote;
+    TextView textVarianZa;
+    TextView textVarianProtiv;
+    TextView textVarianVozderj;
     Button yes;
     Button no;
     Button neutral;
@@ -79,6 +83,7 @@ public class VoteActivity extends AppCompatActivity {
     String idCard;
     String status;
     String yourVotestring;
+
 
     HorizontalBarChart chart;
 
@@ -89,7 +94,7 @@ public class VoteActivity extends AppCompatActivity {
 
     private long mLastClickTime = 0;
 
-    AnyChartView chartView;
+
 
     int yesCount;
     int noCount;
@@ -127,12 +132,14 @@ public class VoteActivity extends AppCompatActivity {
         yes = findViewById(R.id.variant_yes_button);
         no = findViewById(R.id.variant_no_button);
         neutral = findViewById(R.id.variant_neutral_button);
+        textVarianZa = findViewById(R.id.variant_za);
+        textVarianProtiv = findViewById(R.id.variant_protiv);
+        textVarianVozderj = findViewById(R.id.variant_vozderj);
 
         progressbar = findViewById(R.id.progressBarVote);
         constraintLayout = findViewById(R.id.voteActivityContent);
 
-
-        chartView = findViewById(R.id.chartView);
+        chart = findViewById(R.id.chart1);
 
         Bundle arguments = getIntent().getExtras();
         VotingCard card = (VotingCard) (arguments.getSerializable("card"));
@@ -347,7 +354,12 @@ public class VoteActivity extends AppCompatActivity {
             totalNumberOfUsers.setText("Количество голосующих: " + String.valueOf(VoteApplication.getInstance().totalUsers));
             totalNumberOfVoters.setText("Количество участников голосования: " + String.valueOf(totalVoters) );
             numberOfVoters.setText("Проголосовало: " + String.valueOf(numberVorets));
-            yourVote.setText("Вы проголосовали за вариант: " + yourVotestring);
+            if(yourVotestring.equals("You are not voted")){
+                yourVote.setText("Вы не голосовали");
+            }
+            else {
+                yourVote.setText("Вы проголосовали за вариант: " + yourVotestring);
+            }
 
             for (int i = 0; i < VoteApplication.getInstance().variant.size(); i++) {
                 Log.d("mytest", VoteApplication.getInstance().variant.get(i) + " " + countVotesForVariant.get(i));
@@ -361,7 +373,11 @@ public class VoteActivity extends AppCompatActivity {
                         totalNumberOfVoters.setVisibility(View.VISIBLE);
                         numberOfVoters.setVisibility(View.VISIBLE);
                         yourVote.setVisibility(View.VISIBLE);
-                        chartView.setVisibility(View.VISIBLE);
+                        textVarianProtiv.setVisibility(View.VISIBLE);
+                        textVarianZa.setVisibility(View.VISIBLE);
+                        textVarianVozderj.setVisibility(View.VISIBLE);
+
+                        chart.setVisibility(View.VISIBLE);
                         setupPieChart(VoteApplication.getInstance().variant,countVotesForVariant);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -425,83 +441,9 @@ public class VoteActivity extends AppCompatActivity {
     }
 
     public void setupPieChart(List<String> firstList, List<Integer> secondList) {
-   /*     Pie pie = AnyChart.pie();
-
-        List<DataEntry> dataEntries = new ArrayList<>();
-
-        for (int i = 0; i < firstList.size(); i++) {
-            dataEntries.add(new ValueDataEntry(firstList.get(i), secondList.get(i)));
-        }
-
-        pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
-            @Override
-            public void onClick(Event event) {
-                //Toast.makeText(chartView.getContext(), event.getData().get("x") + ":" + event.getData().get("value"), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        pie.title("Распределение голосов");
-
-        pie.labels().position("outside");
-
-        pie.legend().title().enabled(true);
-        pie.legend().title()
-                .text("Варианты ответов")
-                .padding(0d, 0d, 10d, 0d);
 
 
 
-
-        pie.legend()
-                .position("center-bottom")
-                .itemsLayout(LegendLayout.HORIZONTAL)
-                .align(Align.CENTER);
-
-        pie.data(dataEntries);
-
-        chartView.setChart(pie);
-
-*/
-
-/*
-        Cartesian cartesian = AnyChart.column();
-
-        List<DataEntry> data = new ArrayList<>();
-
-        for (int i = 0; i < firstList.size(); i++) {
-            data.add(new ValueDataEntry(firstList.get(i), secondList.get(i)));
-        }
-
-
-        Column column = cartesian.column(data);
-
-        column.tooltip()
-                .titleFormat("{%X}")
-                .position(Position.CENTER_BOTTOM)
-                .anchor(Anchor.CENTER_BOTTOM)
-                .offsetX(0d)
-                .offsetY(5d)
-                .format("{%Value}{groupsSeparator: }");
-
-        cartesian.animation(true);
-        cartesian.title("Распределение голосов");
-
-        cartesian.yScale().minimum(0d);
-
-        cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
-
-        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
-        cartesian.interactivity().hoverMode(HoverMode.BY_X);
-
-        cartesian.xAxis(0).title("Варианты ответов");
-        cartesian.yAxis(0).title("Количество голосов");
-
-        chartView.setChart(cartesian);
-*/
-
-////////////////////////////////////////////////////////////////
-
-        chart = findViewById(R.id.chart1);
         // chart.setHighlightEnabled(false);
 
         chart.setDrawBarShadow(false);
@@ -548,21 +490,20 @@ public class VoteActivity extends AppCompatActivity {
 
 
         Legend l = chart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setDrawInside(false);
-        l.setYEntrySpace(80f);
-        l.setTextSize(10);
+        l.setEnabled(false);
+        l.setTextSize(0f);
         l.setFormSize(0f);
-        l.setXEntrySpace(0f);
+        //l.setXEntrySpace(0f);
 
         //List<BarEntry> values = new ArrayList<>();
 
-        secondList.set(0,6);
-        secondList.set(1,12);
-        secondList.set(2,32);
-        numberVorets=50;
+       // secondList.set(0,6);
+       // secondList.set(1,12);
+       // secondList.set(2,32);
+        //numberVorets=50;
 
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         for (int i = 0; i < firstList.size(); i++) {
@@ -587,4 +528,16 @@ public class VoteActivity extends AppCompatActivity {
 
 
     }
+
+  /*  public ArrayList<Integer> sortList(ArrayList<Integer> sortList){
+        ArrayList<Integer> list = new ArrayList<>();
+        list=sortList;
+        Collections.reverse(sortList);
+        for(int i=0;i<list.size();i++){
+            if()
+        }
+
+        return list;
+    }
+    */
 }

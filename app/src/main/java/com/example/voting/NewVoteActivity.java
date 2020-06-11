@@ -220,7 +220,7 @@ public class NewVoteActivity extends AppCompatActivity {
                         listSelectedAddress = listUserAddress;
                         listSelectedUserUID = listUserUID;
                     }
-                    mJRSpinner.setVisibility(View.GONE);
+                    mJRSpinner.setVisibility(View.INVISIBLE);
                 } else {
                     mJRSpinner.setVisibility(View.VISIBLE);
                 }
