@@ -26,18 +26,23 @@
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="2"
                     android:layout_marginLeft="5dp"
                     android:ellipsize="end"
+                    android:fontFamily="@font/pt_sans_bold"
+                    android:maxLines="2"
+                    android:text="NAME"
                     android:textSize="24sp" />
 
                 <TextView
+                    android:id="@+id/description"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="2"
                     android:layout_marginLeft="5dp"
                     android:ellipsize="end"
-                    android:id="@+id/description"/>
+                    android:fontFamily="@font/pt_sans"
+                    android:maxLines="2"
+                    android:text="OPISANIE" />
 
             </LinearLayout>
 

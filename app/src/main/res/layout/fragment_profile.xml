@@ -11,12 +11,13 @@
         android:id="@+id/textProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/merriweather_bold"
         android:text="Ваш профиль"
+        android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textSize="24dp"
         app:layout_constraintVertical_bias="0.255" />
 
     <TextView
@@ -24,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:fontFamily="@font/merriweather"
         android:text="surname"
         android:textSize="18dp"
         app:layout_constraintHorizontal_bias="0.498"
@@ -33,24 +35,26 @@
 
     <TextView
         android:id="@+id/name"
-        app:layout_constraintTop_toBottomOf="@+id/surname"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/merriweather"
+        android:text="name"
         android:textSize="18dp"
-        android:text="name" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/surname" />
 
     <TextView
         android:id="@+id/otv"
-        app:layout_constraintTop_toBottomOf="@+id/name"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/merriweather"
+        android:text="otv"
         android:textSize="18dp"
-        android:text="otv" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

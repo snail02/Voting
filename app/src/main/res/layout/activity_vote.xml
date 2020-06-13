@@ -35,6 +35,7 @@
             android:id="@+id/name_vote_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/merriweather_bold"
             android:text="Тема вопроса"
             android:textSize="24sp" />
 
@@ -42,13 +43,13 @@
             android:id="@+id/desc_vote_text"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:ems="10"
-            android:gravity="start|top"
-            android:focusable="false"
             android:clickable="false"
             android:cursorVisible="false"
-            android:inputType="textMultiLine"
-             />
+            android:ems="10"
+            android:focusable="false"
+            android:fontFamily="@font/merriweather"
+            android:gravity="start|top"
+            android:inputType="textMultiLine" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/voteActivityContent"
@@ -66,26 +67,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/variant_yes_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_style"
-            android:text="За" />
+            <Button
+                android:id="@+id/variant_yes_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_style"
+                android:fontFamily="@font/merriweather"
+                android:text="За" />
 
-        <Button
-            android:id="@+id/variant_no_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_style"
-            android:text="Против" />
+            <Button
+                android:id="@+id/variant_no_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_style"
 
-        <Button
-            android:id="@+id/variant_neutral_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_style"
-            android:text="Воздержаться" />
+                android:fontFamily="@font/merriweather"
+                android:text="Против" />
+
+            <Button
+                android:id="@+id/variant_neutral_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_style"
+                android:fontFamily="@font/merriweather"
+                android:text="Воздержаться" />
 
         </LinearLayout>
 
@@ -97,41 +102,46 @@
             android:id="@+id/message_for_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/merriweather_bold"
             android:text="Дождитесь завершения голосования, чтобы ознакомиться с результатами"
             android:textSize="24sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/totalNumberOfUsers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/merriweather"
             android:text="totalNumberOfUsers"
             android:textSize="20sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/totalNumberOfVoters"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/merriweather"
             android:text="totalNumberOfVoters"
             android:textSize="20sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/numberOfVoters"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/merriweather"
             android:text="numberOfVoters"
             android:textSize="20sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/yourVote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/merriweather"
             android:text="yourVote"
             android:textSize="20sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <ProgressBar
             android:id="@+id/progressBarVote"
@@ -166,33 +176,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="120dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/chart1"
+                android:fontFamily="@font/merriweather_bold"
                 android:text="За"
                 android:textSize="13sp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:layout_constraintRight_toLeftOf="@+id/chart1"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/variant_protiv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="105dp"
-                app:layout_constraintTop_toBottomOf="@+id/variant_za"
-                app:layout_constraintRight_toLeftOf="@+id/chart1"
+                android:fontFamily="@font/merriweather_bold"
                 android:text="Против"
                 android:textSize="13sp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:layout_constraintRight_toLeftOf="@+id/chart1"
+                app:layout_constraintTop_toBottomOf="@+id/variant_za" />
 
             <TextView
                 android:id="@+id/variant_vozderj"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="105dp"
-                app:layout_constraintTop_toBottomOf="@+id/variant_protiv"
-                app:layout_constraintRight_toLeftOf="@+id/chart1"
+                android:fontFamily="@font/pt_sans_bold"
                 android:text="Воздержаться"
                 android:textSize="13sp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:layout_constraintRight_toLeftOf="@+id/chart1"
+                app:layout_constraintTop_toBottomOf="@+id/variant_protiv" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
