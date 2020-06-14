@@ -13,6 +13,9 @@
         <item name="colorPrimary">@color/myColorPrimary</item>
         <item name="colorPrimaryDark">@color/myColorPrimaryDark</item>
         <item name="colorAccent">@color/myColorAccent</item>
+
+        <item name="android:fontFamily">@font/merriweather</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="DialogStyle" parent="Theme.AppCompat.Light.Dialog">

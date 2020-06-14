@@ -104,6 +104,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/merriweather_bold"
             android:text="Дождитесь завершения голосования, чтобы ознакомиться с результатами"
+            android:gravity="center"
             android:textSize="24sp"
             android:visibility="gone" />
 

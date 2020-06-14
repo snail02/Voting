@@ -92,7 +92,6 @@
             android:layout_marginTop="30dp"
             android:layout_marginRight="5dp"
             android:checked="false"
-            android:fontFamily="@font/merriweather_bold"
             android:text="Дать доступ всем пользователям" />
 
 
