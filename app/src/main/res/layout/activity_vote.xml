@@ -239,6 +239,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/yourVote"
                 app:layout_constraintLeft_toRightOf="@id/imageViewYouVote"
                 android:text="Ваш голос"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Итоги голосования"
+                android:fontFamily="@font/merriweather_bold"
+                app:layout_constraintTop_toBottomOf="@id/imageViewYouVote"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="10dp"
+                android:textSize="24sp"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
