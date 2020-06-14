@@ -83,6 +83,7 @@ public class VoteActivity extends AppCompatActivity {
     String idCard;
     String status;
     String yourVotestring;
+    ConstraintLayout constraintInfoVote;
 
 
     HorizontalBarChart chart;
@@ -121,6 +122,8 @@ public class VoteActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Голосование");
+
+        constraintInfoVote = findViewById(R.id.constraintInfoVote);
 
         nameVote = findViewById(R.id.name_vote_text);
         descVote = findViewById(R.id.desc_vote_text);
@@ -309,7 +312,7 @@ public class VoteActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(VoteActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(VoteActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -351,14 +354,14 @@ public class VoteActivity extends AppCompatActivity {
         if (!isActive) {
 
 
-            totalNumberOfUsers.setText("Количество голосующих: " + String.valueOf(VoteApplication.getInstance().totalUsers));
-            totalNumberOfVoters.setText("Количество участников голосования: " + String.valueOf(totalVoters) );
-            numberOfVoters.setText("Проголосовало: " + String.valueOf(numberVorets));
+            totalNumberOfUsers.setText( String.valueOf(VoteApplication.getInstance().totalUsers));
+            totalNumberOfVoters.setText( String.valueOf(totalVoters) );
+            numberOfVoters.setText( String.valueOf(numberVorets));
             if(yourVotestring.equals("You are not voted")){
                 yourVote.setText("Вы не голосовали");
             }
             else {
-                yourVote.setText("Вы проголосовали за вариант: " + yourVotestring);
+                yourVote.setText( yourVotestring);
             }
 
             for (int i = 0; i < VoteApplication.getInstance().variant.size(); i++) {
@@ -369,10 +372,11 @@ public class VoteActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
-                        totalNumberOfUsers.setVisibility(View.VISIBLE);
-                        totalNumberOfVoters.setVisibility(View.VISIBLE);
-                        numberOfVoters.setVisibility(View.VISIBLE);
-                        yourVote.setVisibility(View.VISIBLE);
+                        constraintInfoVote.setVisibility(View.VISIBLE);
+                        //totalNumberOfUsers.setVisibility(View.VISIBLE);
+                       // totalNumberOfVoters.setVisibility(View.VISIBLE);
+                       // numberOfVoters.setVisibility(View.VISIBLE);
+                       // yourVote.setVisibility(View.VISIBLE);
                         textVarianProtiv.setVisibility(View.VISIBLE);
                         textVarianZa.setVisibility(View.VISIBLE);
                         textVarianVozderj.setVisibility(View.VISIBLE);
