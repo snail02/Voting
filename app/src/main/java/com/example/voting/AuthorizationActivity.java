@@ -25,10 +25,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.kenai.jffi.Main;
 
 import org.web3j.crypto.Credentials;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AuthorizationActivity extends AppCompatActivity {
 
@@ -91,6 +96,12 @@ public class AuthorizationActivity extends AppCompatActivity {
                         refreshToken();
                         Intent myIntent = new Intent(AuthorizationActivity.this,  BaseActivity.class);
                         AuthorizationActivity.this.startActivity(myIntent);
+
+                        Map<String, String> params = new HashMap<>();
+                        params.put("active", "Авторизация в приложении");
+                        FirebaseFunctions.getInstance() // Optional region: .getInstance("europe-west1")
+                                .getHttpsCallable("saveActiveUser")
+                                .call(params);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override

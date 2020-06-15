@@ -50,6 +50,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.functions.FirebaseFunctions;
 
 
 import org.web3j.abi.datatypes.Int;
@@ -328,6 +329,13 @@ public class VoteActivity extends AppCompatActivity {
                 try {
                     vote.vote(BigInteger.valueOf(index)).send();
                     closeVote();
+
+                    Map<String, String> params = new HashMap<>();
+                    params.put("active", "Отдан голос в голосовании: " + nameVote.getText());
+                    FirebaseFunctions.getInstance() // Optional region: .getInstance("europe-west1")
+                            .getHttpsCallable("saveActiveUser")
+                            .call(params);
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

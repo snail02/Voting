@@ -16,6 +16,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.functions.FirebaseFunctions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Profile extends Fragment implements UserInfoListener{
@@ -69,6 +73,12 @@ Button buttonSignOut;
     }
 
     private void signOut() {
+        Map<String, String> params = new HashMap<>();
+        params.put("active", "Выход из аккаунта");
+        FirebaseFunctions.getInstance() // Optional region: .getInstance("europe-west1")
+                .getHttpsCallable("saveActiveUser")
+                .call(params);
+
         VoteApplication.getInstance().users.child(VoteApplication.getInstance().auth.getCurrentUser().getUid()).child("fcmtoken").setValue("");
 
         FirebaseAuth.getInstance().signOut();

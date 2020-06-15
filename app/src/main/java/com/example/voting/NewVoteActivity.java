@@ -192,6 +192,12 @@ public class NewVoteActivity extends AppCompatActivity {
 
                                 sendNotification("Новое голосование", name); // отправка уведомления пользователям о доступности голосовнаия
 
+                                Map<String, String> params = new HashMap<>();
+                                params.put("active", "Создано голосование: " + name);
+                                FirebaseFunctions.getInstance() // Optional region: .getInstance("europe-west1")
+                                        .getHttpsCallable("saveActiveUser")
+                                        .call(params);
+
                             } catch (Exception e) {
                                 Log.d("mytest", e.getMessage());
                                 //Toast.makeText(NewVoteActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();

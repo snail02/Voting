@@ -25,10 +25,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.santalu.maskedittext.MaskEditText;
 
 import java.security.PublicKey;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -118,8 +121,20 @@ public class RegistrationActivity extends AppCompatActivity {
                         .setValue(user)
                         .addOnSuccessListener(aVoid -> {
                             Toast.makeText(RegistrationActivity.this, "Вы успешно зарегистрированы", Toast.LENGTH_SHORT).show();
-                            Intent myIntent = new Intent(RegistrationActivity.this, MainActivity.class);
+
+                            FirebaseFunctions.getInstance() // Optional region: .getInstance("europe-west1")
+                                    .getHttpsCallable("registrationUser")
+                                    .call();
+
+                            Intent myIntent = new Intent(RegistrationActivity.this, BaseActivity.class);
                             RegistrationActivity.this.startActivity(myIntent);
+
+                            Map<String, String> params = new HashMap<>();
+                            params.put("active", "Регистрация в приложении");
+                            FirebaseFunctions.getInstance() // Optional region: .getInstance("europe-west1")
+                                    .getHttpsCallable("saveActiveUser")
+                                    .call(params);
+
                         });
             }
         }).addOnFailureListener(new OnFailureListener() {

@@ -59,7 +59,7 @@
             android:fontFamily="@font/merriweather_bold"
             android:gravity="center"
             android:text="Дождитесь завершения голосования, чтобы ознакомиться с результатами"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:visibility="gone" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

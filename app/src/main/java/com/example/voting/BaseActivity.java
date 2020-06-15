@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.voting.contract.Vote;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +25,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.web3j.crypto.Credentials;
@@ -32,6 +35,9 @@ import org.web3j.protocol.Web3j;
 import java.security.Provider;
 import java.security.Security;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -70,6 +76,12 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void signOut() {
+        Map<String, String> params = new HashMap<>();
+        params.put("active", "Выход из аккаунта");
+        FirebaseFunctions.getInstance() // Optional region: .getInstance("europe-west1")
+                .getHttpsCallable("saveActiveUser")
+                .call(params);
+
         VoteApplication.getInstance().users.child(VoteApplication.getInstance().auth.getCurrentUser().getUid()).child("fcmtoken").setValue("");
 
         FirebaseAuth.getInstance().signOut();
@@ -113,13 +125,12 @@ public class BaseActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Активные голосования");
 
 
-
         viewPager.setAdapter(pagerAdapter);
 
         web3j = VoteApplication.getInstance().getWeb3j();
 
         bottomNavigationView.setSelectedItemId(R.id.action_votes);
-        viewPager.setCurrentItem(1,false);
+        viewPager.setCurrentItem(1, false);
 
 /*
         viewPager.setOnTouchListener(new View.OnTouchListener() {
@@ -128,8 +139,12 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
 */
         //credentials = Credentials.create(VoteApplication.getInstance().PRIVATE_KEY);
+
+
 
         DatabaseReference myRef = VoteApplication.getInstance().myRef;
         Query myQuery = myRef;
@@ -231,22 +246,21 @@ public class BaseActivity extends AppCompatActivity {
                         getSupportActionBar().setTitle("История действий");
                         break;
                     case R.id.action_votes:
-                        viewPager.setCurrentItem(1,false);
+                        viewPager.setCurrentItem(1, false);
                         getSupportActionBar().setTitle("Активные голосования");
                         break;
                     case R.id.action_votes_closed:
-                        viewPager.setCurrentItem(2,false);
+                        viewPager.setCurrentItem(2, false);
                         getSupportActionBar().setTitle("Завершенные голосования");
                         break;
                     case R.id.action_profile:
-                        viewPager.setCurrentItem(3,false);
+                        viewPager.setCurrentItem(3, false);
                         getSupportActionBar().setTitle("Профиль");
                         break;
                 }
                 return true;
             }
         });
-
 
 
     }

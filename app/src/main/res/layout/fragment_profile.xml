@@ -62,11 +62,13 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button_style"
-        android:text="Выход из аккаунта"
+        android:text="выход из аккаунта"
+        android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/otv"
-        app:layout_constraintVertical_bias="0.868" />
+        app:layout_constraintVertical_bias="0.868"
+        android:textAllCaps="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
