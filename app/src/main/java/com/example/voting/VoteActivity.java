@@ -358,7 +358,7 @@ public class VoteActivity extends AppCompatActivity {
             totalNumberOfVoters.setText( String.valueOf(totalVoters) );
             numberOfVoters.setText( String.valueOf(numberVorets));
             if(yourVotestring.equals("You are not voted")){
-                yourVote.setText("Вы не голосовали");
+                yourVote.setText("Вы не приняли участия");
             }
             else {
                 yourVote.setText( yourVotestring);

@@ -1,6 +1,7 @@
 package com.example.voting;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,7 +12,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class Profile extends Fragment implements UserInfoListener{
@@ -22,6 +26,7 @@ public class Profile extends Fragment implements UserInfoListener{
 TextView surename;
 TextView name;
 TextView otv;
+Button buttonSignOut;
 
     private OnFragmentInteractionListener mListener;
 
@@ -49,10 +54,27 @@ TextView otv;
         surename = view.findViewById(R.id.surname);
         name = view.findViewById(R.id.name);
         otv = view.findViewById(R.id.otv);
+        buttonSignOut = view.findViewById(R.id.buttonSignOut);
 
         VoteApplication.getInstance().setListener(this);
         VoteApplication.getInstance().getUserFromFB();
         getUserInfo();
+
+        buttonSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signOut();
+            }
+        });
+    }
+
+    private void signOut() {
+        VoteApplication.getInstance().users.child(VoteApplication.getInstance().auth.getCurrentUser().getUid()).child("fcmtoken").setValue("");
+
+        FirebaseAuth.getInstance().signOut();
+        //finish();
+        startActivity(new Intent(getContext(), StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+
     }
 
     @Override
