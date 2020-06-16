@@ -534,20 +534,18 @@ public class VoteActivity extends AppCompatActivity {
        // secondList.set(1,12);
        // secondList.set(2,32);
         //numberVorets=50;
+        List<BarEntry> values = new ArrayList<>();
+        for (int i = 0; i < firstList.size(); i++) {
+
+            //values.add(new BarEntry(firstList.get(i), secondList.get(i)));
+            values.add(new BarEntry(i,(float)secondList.get(2-i)/numberVorets*100));
+
+
+        }
+        BarDataSet set1 = new BarDataSet(values , "");
 
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
-        for (int i = 0; i < firstList.size(); i++) {
-            List<BarEntry> values = new ArrayList<>();
-            //values.add(new BarEntry(firstList.get(i), secondList.get(i)));
-            values.add(new BarEntry(i,(float)secondList.get(i)/numberVorets*100));
-            BarDataSet set1 = new BarDataSet(values , firstList.get(i));
-            dataSets.add(set1);
-        }
-
-        //BarDataSet set1 = new BarDataSet(values , "");
-
-        //ArrayList<IBarDataSet> dataSets = new ArrayList<>();
-        //dataSets.add(set1);
+        dataSets.add(set1);
 
         BarData data = new BarData(dataSets);
         data.setValueTextSize(10f);
