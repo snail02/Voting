@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.voting.contract.Vote;
@@ -214,6 +215,37 @@ public class BaseActivity extends AppCompatActivity {
                     case 0:
                         bottomNavigationView.setSelectedItemId(R.id.action_history);
                         getSupportActionBar().setTitle("История действий");
+
+                        FirebaseFunctions.getInstance() // Optional region: .getInstance("europe-west1")
+                                .getHttpsCallable("getActiveUser")
+                                .call().addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                            @Override
+                            public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                                Log.d("mytest",httpsCallableResult.getData().toString());
+                                HashMap<String, ArrayList<Object>> map = (HashMap<String, ArrayList<Object>>) httpsCallableResult.getData();
+                                ArrayList<Object> list = map.get("active");
+                                ArrayList<ActiveItem> list2 = new ArrayList<>() ;
+                                for(int i=0; i<list.size(); i++){
+
+                                    long sec = ((HashMap<String,Integer>)((HashMap<String, Object>)list.get(i)).get("date")).get("_seconds") ;
+                                    long milisec = sec*1000;
+                                    Date date = new Date(milisec + 5*3600*1000);
+
+                                    String active = ((HashMap<String,String>)list.get(i)).get("active");
+                                    ActiveItem activeItem = new ActiveItem(date, active);
+                                    list2.add(activeItem);
+
+                                }
+                                pagerAdapter.actionHistory(list2);
+
+                                //adapterActionHistory.addActionItems(list2);
+
+
+
+
+                            }
+                        });
+
                         break;
                     case 1:
                         bottomNavigationView.setSelectedItemId(R.id.action_votes);

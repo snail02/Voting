@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.functions.FirebaseFunctions;
@@ -32,6 +33,7 @@ public class HistoryAction extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     ActionHistoryAdapter adapterActionHistory;
+    ProgressBar progressBar;
 
     private OnFragmentInteractionListener mListener;
 
@@ -51,6 +53,7 @@ public class HistoryAction extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewActionHistory);
+         progressBar =  view.findViewById(R.id.progressBarActiveHistory);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
 
@@ -64,51 +67,27 @@ public class HistoryAction extends Fragment {
         recyclerView.setAdapter(adapterActionHistory);
 
 
-        FirebaseFunctions.getInstance() // Optional region: .getInstance("europe-west1")
-                .getHttpsCallable("getActiveUser")
-                .call().addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
-            @Override
-            public void onSuccess(HttpsCallableResult httpsCallableResult) {
-                Log.d("mytest",httpsCallableResult.getData().toString());
-                HashMap<String, ArrayList<Object>> map = (HashMap<String, ArrayList<Object>>) httpsCallableResult.getData();
-                ArrayList<Object> list = map.get("active");
-                ArrayList<ActiveItem> list2 = new ArrayList<>() ;
-                for(int i=0; i<list.size(); i++){
 
-                    long sec = ((HashMap<String,Integer>)((HashMap<String, Object>)list.get(i)).get("date")).get("_seconds") ;
-                    long milisec = sec*1000;
-                    Date date = new Date(milisec + 5*3600*1000);
-
-                    String active = ((HashMap<String,String>)list.get(i)).get("active");
-                    ActiveItem activeItem = new ActiveItem(date, active);
-                    list2.add(activeItem);
-
-                }
-
-                adapterActionHistory.addActionItems(list2);
-
-
-
-
-            }
-        });
 
 
 
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
-
+        Log.d("gfg","sdsd");
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
 
         return inflater.inflate(R.layout.fragment_history_action, container, false);
     }
@@ -139,5 +118,7 @@ public class HistoryAction extends Fragment {
             adapterActionHistory = new ActionHistoryAdapter(new ArrayList<>());
         }
         adapterActionHistory.addActionItems(items);
+        adapterActionHistory.notifyDataSetChanged();
+        progressBar.setVisibility(View.GONE);
     }
 }

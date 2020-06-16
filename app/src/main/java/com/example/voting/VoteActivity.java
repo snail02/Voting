@@ -209,6 +209,7 @@ public class VoteActivity extends AppCompatActivity {
 
             getResultVote();
 
+
             messageForUser.setText("Голосование закрыто");
 
 
@@ -220,7 +221,7 @@ public class VoteActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
-                        progressbar.setVisibility(View.GONE);
+                        //progressbar.setVisibility(View.GONE);
                         constraintLayout.setVisibility(View.GONE);
                         messageForUser.setVisibility(View.VISIBLE);
 
@@ -360,42 +361,59 @@ public class VoteActivity extends AppCompatActivity {
 
     public void printResultVote() {
         if (!isActive) {
-
-
-            totalNumberOfUsers.setText( String.valueOf(VoteApplication.getInstance().totalUsers));
-            totalNumberOfVoters.setText( String.valueOf(totalVoters) );
-            numberOfVoters.setText( String.valueOf(numberVorets));
-            if(yourVotestring.equals("You are not voted")){
-                yourVote.setText("Вы не приняли участия");
-            }
-            else {
-                yourVote.setText( yourVotestring);
-            }
-
-            for (int i = 0; i < VoteApplication.getInstance().variant.size(); i++) {
-                Log.d("mytest", VoteApplication.getInstance().variant.get(i) + " " + countVotesForVariant.get(i));
-            }
-
-            runOnUiThread(new Runnable() {
+            Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        constraintInfoVote.setVisibility(View.VISIBLE);
-                        //totalNumberOfUsers.setVisibility(View.VISIBLE);
-                       // totalNumberOfVoters.setVisibility(View.VISIBLE);
-                       // numberOfVoters.setVisibility(View.VISIBLE);
-                       // yourVote.setVisibility(View.VISIBLE);
-                        textVarianProtiv.setVisibility(View.VISIBLE);
-                        textVarianZa.setVisibility(View.VISIBLE);
-                        textVarianVozderj.setVisibility(View.VISIBLE);
+                        Thread.sleep(2000);
 
-                        chart.setVisibility(View.VISIBLE);
-                        setupPieChart(VoteApplication.getInstance().variant,countVotesForVariant);
-                    } catch (Exception e) {
+                        totalNumberOfUsers.setText( String.valueOf(VoteApplication.getInstance().totalUsers));
+                        totalNumberOfVoters.setText( String.valueOf(totalVoters) );
+                        numberOfVoters.setText( String.valueOf(numberVorets));
+                        if(yourVotestring.equals("You are not voted")){
+                            yourVote.setText("Вы не приняли участия");
+                        }
+                        else {
+                            yourVote.setText( yourVotestring);
+                        }
+
+                        for (int i = 0; i < VoteApplication.getInstance().variant.size(); i++) {
+                            Log.d("mytest", VoteApplication.getInstance().variant.get(i) + " " + countVotesForVariant.get(i));
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    progressbar.setVisibility(View.GONE);
+                                    constraintInfoVote.setVisibility(View.VISIBLE);
+                                    //totalNumberOfUsers.setVisibility(View.VISIBLE);
+                                    // totalNumberOfVoters.setVisibility(View.VISIBLE);
+                                    // numberOfVoters.setVisibility(View.VISIBLE);
+                                    // yourVote.setVisibility(View.VISIBLE);
+                                    textVarianProtiv.setVisibility(View.VISIBLE);
+                                    textVarianZa.setVisibility(View.VISIBLE);
+                                    textVarianVozderj.setVisibility(View.VISIBLE);
+
+                                    chart.setVisibility(View.VISIBLE);
+                                    setupPieChart(VoteApplication.getInstance().variant,countVotesForVariant);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
+
                 }
             });
+            thread.start();
+
+
+
             // Log.d("mytest", "da " +  yesCount);
             // Log.d("mytest", "net " +  noCount);
             // Log.d("mytest", "vozderjalsya " +  vozderjalsya_count);
