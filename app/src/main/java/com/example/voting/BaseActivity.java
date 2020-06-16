@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -79,15 +80,22 @@ public class BaseActivity extends AppCompatActivity {
     private void signOut() {
         Map<String, String> params = new HashMap<>();
         params.put("active", "Выход из аккаунта");
+
+        Context context = this;
         FirebaseFunctions.getInstance() // Optional region: .getInstance("europe-west1")
                 .getHttpsCallable("saveActiveUser")
-                .call(params);
+                .call(params)
+                .addOnSuccessListener(new OnSuccessListener<HttpsCallableResult>() {
+                    @Override
+                    public void onSuccess(HttpsCallableResult httpsCallableResult) {
+                        VoteApplication.getInstance().users.child(VoteApplication.getInstance().auth.getCurrentUser().getUid()).child("fcmtoken").setValue("");
 
-        VoteApplication.getInstance().users.child(VoteApplication.getInstance().auth.getCurrentUser().getUid()).child("fcmtoken").setValue("");
+                        FirebaseAuth.getInstance().signOut();
+                        finish();
+                        startActivity(new Intent(context, StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                });
 
-        FirebaseAuth.getInstance().signOut();
-        finish();
-        startActivity(new Intent(this, StartActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
 
     }
 
@@ -229,7 +237,7 @@ public class BaseActivity extends AppCompatActivity {
 
                                     long sec = ((HashMap<String,Integer>)((HashMap<String, Object>)list.get(i)).get("date")).get("_seconds") ;
                                     long milisec = sec*1000;
-                                    Date date = new Date(milisec + 5*3600*1000);
+                                    Date date = new Date(milisec);
 
                                     String active = ((HashMap<String,String>)list.get(i)).get("active");
                                     ActiveItem activeItem = new ActiveItem(date, active);
