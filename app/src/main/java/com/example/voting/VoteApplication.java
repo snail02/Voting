@@ -31,7 +31,8 @@ public class VoteApplication extends Application {
     FirebaseAuth auth;
     DatabaseReference users;
     //String connectUrl = "HTTP://192.168.0.103:7545";
-    String connectUrl = "HTTP://94.41.101.216:7545";
+    String connectUrl = "HTTP://77.79.157.40:7545";
+    //String connectUrl = "https://ropsten.infura.io/v3/6217c9661e8143cdad94007434e30c43";
     String PRIVATE_KEY;
     User user = new User();
     UserInfoListener listener;
