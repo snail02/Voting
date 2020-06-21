@@ -16,6 +16,7 @@ public class VotingCard implements Serializable {
     public String address;
     public String id;
     public boolean statusActive;
+    public int timeLife;
 
     VotingCard(){
         name = "Вопрос";
@@ -24,12 +25,13 @@ public class VotingCard implements Serializable {
         statusActive = true;
     }
 
-    VotingCard(String name, String descripton, String address, boolean statusActive, String id){
+    VotingCard(String name, String descripton, String address, boolean statusActive, String id, int timeLife){
         this.name = name;
         this.descripton = descripton;
         this.address = address;
         this.statusActive = statusActive;
         this.id = id;
+        this.timeLife=timeLife;
     }
 
     VotingCard(Vote vote) throws Exception {
@@ -47,6 +49,14 @@ public class VotingCard implements Serializable {
     public String getAddress(){ return address; }
     public String getId(){
         return id;
+    }
+
+    public int getTimeLife() {
+        return timeLife;
+    }
+
+    public void setTimeLife(int timeLife) {
+        this.timeLife = timeLife;
     }
 
     public void setStatusActive(boolean statusActive) {

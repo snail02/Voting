@@ -162,7 +162,7 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 SmartContract contract = dataSnapshot.getValue(SmartContract.class);
-                VotingCard vc = new VotingCard(contract.getName(), contract.getDescription(), contract.getAddress(), contract.isStatusActive(), dataSnapshot.getKey());
+                VotingCard vc = new VotingCard(contract.getName(), contract.getDescription(), contract.getAddress(), contract.isStatusActive(), dataSnapshot.getKey(), contract.getTimelife());
                 ArrayList<VotingCard> listActive = new ArrayList<>();
                 ArrayList<VotingCard> listPassive = new ArrayList<>();
                 if (vc.isStatusActive()) {
@@ -181,7 +181,7 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 SmartContract contract = dataSnapshot.getValue(SmartContract.class);
-                VotingCard vc = new VotingCard(contract.getName(), contract.getDescription(), contract.getAddress(), contract.isStatusActive(), dataSnapshot.getKey());
+                VotingCard vc = new VotingCard(contract.getName(), contract.getDescription(), contract.getAddress(), contract.isStatusActive(), dataSnapshot.getKey(), contract.getTimelife());
                 ArrayList<VotingCard> listActive = new ArrayList<>();
                 ArrayList<VotingCard> listPassive = new ArrayList<>();
                 if (vc.isStatusActive()) {

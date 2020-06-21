@@ -77,6 +77,7 @@ public class VoteActivity extends AppCompatActivity {
     TextView textVarianZa;
     TextView textVarianProtiv;
     TextView textVarianVozderj;
+    TextView timeLifeVote;
     Button yes;
     Button no;
     Button neutral;
@@ -84,6 +85,7 @@ public class VoteActivity extends AppCompatActivity {
     String idCard;
     String status;
     String yourVotestring;
+    String timeMessage;
     ConstraintLayout constraintInfoVote;
 
 
@@ -139,6 +141,7 @@ public class VoteActivity extends AppCompatActivity {
         textVarianZa = findViewById(R.id.variant_za);
         textVarianProtiv = findViewById(R.id.variant_protiv);
         textVarianVozderj = findViewById(R.id.variant_vozderj);
+        timeLifeVote = findViewById(R.id.timeLifeVote);
 
         progressbar = findViewById(R.id.progressBarVote);
         constraintLayout = findViewById(R.id.voteActivityContent);
@@ -149,6 +152,78 @@ public class VoteActivity extends AppCompatActivity {
         VotingCard card = (VotingCard) (arguments.getSerializable("card"));
         nameVote.setText(card.getName());
         descVote.setText(card.getDescription());
+
+        if (card.isStatusActive()) {
+            if (card.getTimeLife() == 1) {
+                timeMessage = "Осталась 1 минута";
+                timeLifeVote.setText(timeMessage);
+            }
+
+            if (card.getTimeLife() > 1) {
+                timeMessage = "Осталось меньше 5 минут";
+                timeLifeVote.setText(timeMessage);
+            }
+
+            if (card.getTimeLife() > 5) {
+                timeMessage = "Осталось меньше 10 минут";
+                timeLifeVote.setText(timeMessage);
+            }
+
+            if (card.getTimeLife() > 10) {
+                timeMessage = "Осталось меньше 15 минут";
+                timeLifeVote.setText(timeMessage);
+            }
+
+            if (card.getTimeLife() > 15) {
+                timeMessage = "Осталось меньше 20 минут";
+                timeLifeVote.setText(timeMessage);
+            }
+
+            if (card.getTimeLife() > 20) {
+                timeMessage = "Осталось меньше 25 минут";
+                timeLifeVote.setText(timeMessage);
+            }
+
+            if (card.getTimeLife() > 25) {
+                timeMessage = "Осталось меньше 30 минут";
+                timeLifeVote.setText(timeMessage);
+            }
+
+            if (card.getTimeLife() > 30) {
+                timeMessage = "Осталось меньше 35 минут";
+                timeLifeVote.setText(timeMessage);
+            }
+
+            if (card.getTimeLife() > 35) {
+                timeMessage = "Осталось меньше 40 минут";
+                timeLifeVote.setText(timeMessage);
+            }
+
+            if (card.getTimeLife() > 40) {
+                timeMessage = "Осталось меньше 45 минут";
+                timeLifeVote.setText(timeMessage);
+            }
+
+            if (card.getTimeLife() > 45) {
+                timeMessage = "Осталось меньше 50 минут";
+                timeLifeVote.setText(timeMessage);
+            }
+
+            if (card.getTimeLife() > 50) {
+                timeMessage = "Осталось меньше 55 минут";
+                timeLifeVote.setText(timeMessage);
+            }
+
+            if (card.getTimeLife() > 55) {
+                timeMessage = "Осталось меньше 60 минут";
+                timeLifeVote.setText(timeMessage);
+            }
+
+            messageForUser.setText(messageForUser.getText() + "\n("+ timeMessage + ")");
+
+        }
+
+
 
 
         address = card.getAddress();
@@ -272,7 +347,7 @@ public class VoteActivity extends AppCompatActivity {
                                         constraintLayout.setVisibility(View.GONE);
 
                                         if (status.equals("Has no right to vote")) {
-                                            messageForUser.setText("У вас нет доступа");
+                                            messageForUser.setText("У вас нет доступа\n" + " (до завершения голосования "+ timeMessage.toLowerCase() + ")");
                                         }
                                         messageForUser.setVisibility(View.VISIBLE);
                                     } catch (Exception e) {
@@ -344,6 +419,7 @@ public class VoteActivity extends AppCompatActivity {
                                 Toast.makeText(VoteActivity.this, "Вы проголосовали", Toast.LENGTH_SHORT).show();
                                 //progressbar.setVisibility(View.VISIBLE);
                                 constraintLayout.setVisibility(View.GONE);
+                                messageForUser.setText("Дождитесь завершения голосования, чтобы ознакомиться с результатами" +" (" + timeMessage + ")");
                                 messageForUser.setVisibility((View.VISIBLE));
                             } catch (Exception e) {
                                 e.printStackTrace();
